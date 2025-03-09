@@ -1,0 +1,6 @@
+[[headers]]
+  for = "/*"  # Aplica a todos los archivos
+  [headers.values]
+    Access-Control-Allow-Origin = "*"  # Permite todos los orígenes (ajusta según necesidad)
+    Access-Control-Allow-Methods = "GET, OPTIONS"  # Métodos permitidos
+    Access-Control-Allow-Headers = "*"
