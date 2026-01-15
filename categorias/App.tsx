@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Layout } from './components/Layout';
+import { Layout } from './Layout';
 import { IMAGES, MOCK_PRODUCTS, BRANDS, TESTIMONIALS } from './constants';
 import { Product, CartItem, ViewState, FilterState, Review } from './types';
-import ThreeDTire from './components/ThreeDTire';
+import ThreeDTire from './ThreeDTire';
 import { 
   Star, 
   ShoppingCart, 
