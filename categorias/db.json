@@ -1,0 +1,24 @@
+{
+  "products": [
+    {
+      "id": "1",
+      "name": "Cinturato P7 All Season",
+      "price": 3200,
+      "brand": "Pirelli"
+    },
+    {
+      "id": "2",
+      "name": "Eagle F1 Asymmetric",
+      "price": 4500,
+      "brand": "Goodyear"
+    },
+    {
+      "id": "3",
+      "name": "Pilot Sport 4 S",
+      "price": 5200,
+      "brand": "Michelin"
+    }
+  ],
+  "users": [],
+  "orders": []
+}
