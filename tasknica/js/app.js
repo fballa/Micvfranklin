@@ -1,15 +1,7 @@
-import { GoogleGenAI } from "@google/genai";
-
-// --- ENV SIMULATION ---
-// IMPORTANT: Add your Gemini API Key here for the AI to work.
-const process = {
-    env: {
-        API_KEY: '' 
-    }
-};
-
 // --- DATA CONSTANTS ---
 const CURRENCY = "C$";
+const UNIFIED_PHONE = "50558883348";
+
 const CITIES = [
     { name: 'Managua', active: true },
     { name: 'Masaya', active: false },
@@ -23,7 +15,8 @@ const CATEGORIES = [
         icon: "zap",
         color: "bg-amber-100 text-amber-600",
         gradient: "from-amber-500 to-orange-500",
-        description: "Cableado, paneles, iluminación."
+        description: "Cableado, paneles, iluminación.",
+        keywords: ['luz', 'foco', 'cable', 'panel', 'breaker', 'apagón', 'tomacorriente', 'enchufe', 'voltaje', 'eléctrico']
     },
     {
         id: 'Fontanería',
@@ -31,7 +24,8 @@ const CATEGORIES = [
         icon: "wrench",
         color: "bg-cyan-100 text-cyan-600",
         gradient: "from-cyan-500 to-blue-500",
-        description: "Fugas, inodoros, drenajes."
+        description: "Fugas, inodoros, drenajes.",
+        keywords: ['agua', 'fuga', 'grifo', 'tubo', 'baño', 'inodoro', 'lavabo', 'ducha', 'gotera', 'drenaje']
     },
     {
         id: 'Instalaciones',
@@ -39,7 +33,8 @@ const CATEGORIES = [
         icon: "fan",
         color: "bg-emerald-100 text-emerald-600",
         gradient: "from-emerald-500 to-teal-500",
-        description: "Abanicos, Racks TV, Muebles."
+        description: "Abanicos, Racks TV, Muebles.",
+        keywords: ['abanico', 'tv', 'mueble', 'cortina', 'repisa', 'cuadro', 'instalar', 'montar', 'rack']
     }
 ];
 
@@ -54,7 +49,7 @@ const MOCK_TECHNICIANS = [
         hourlyRate: 350,
         city: 'Managua',
         verified: true,
-        phone: '50500000001',
+        phone: UNIFIED_PHONE,
         description: 'Electricista certificado por INATEC con 10 años de experiencia. Especialista en instalaciones residenciales y comerciales.',
         badges: ['Certificado', 'Respuesta Rápida', 'Vacunado']
     },
@@ -68,7 +63,7 @@ const MOCK_TECHNICIANS = [
         hourlyRate: 300,
         city: 'Managua',
         verified: true,
-        phone: '50500000002',
+        phone: UNIFIED_PHONE,
         description: 'Soluciono cualquier problema de tuberías en menos de 24 horas. Trabajo con termofusión y PVC.',
         badges: ['Herramienta Propia', 'Garantía 30 días']
     },
@@ -82,7 +77,7 @@ const MOCK_TECHNICIANS = [
         hourlyRate: 400,
         city: 'Managua',
         verified: true,
-        phone: '50500000003',
+        phone: UNIFIED_PHONE,
         description: 'Experto en montaje de muebles y soportes. Detallista y limpio en el área de trabajo.',
         badges: ['Top Rated', 'Vehículo Propio']
     },
@@ -96,7 +91,7 @@ const MOCK_TECHNICIANS = [
         hourlyRate: 250,
         city: 'Managua',
         verified: false,
-        phone: '50500000004',
+        phone: UNIFIED_PHONE,
         description: 'Fontanería básica, destape de inodoros y limpieza de trampas de grasa. Económico y honesto.',
         badges: ['Económico']
     }
@@ -109,16 +104,18 @@ class NicaTasksApp {
         this.selectedCategory = null;
         this.selectedCity = 'Managua';
         this.prefilledMessage = '';
+        this.isMenuOpen = false;
         this.init();
     }
 
     init() {
         this.renderCategories();
         this.renderRegisterOptions();
-        lucide.createIcons();
         
-        // Initial nav state logic
-        this.updateMobileNav();
+        // Ensure Lucide icons load initially
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
     }
 
     navigate(view) {
@@ -129,34 +126,40 @@ class NicaTasksApp {
         document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
         
         // Show target view
-        document.getElementById(`view-${view.toLowerCase()}`).classList.remove('hidden');
+        const target = document.getElementById(`view-${view.toLowerCase()}`);
+        if(target) target.classList.remove('hidden');
         
         this.currentView = view;
-        this.updateMobileNav();
+        
+        // Close menu if open
+        this.isMenuOpen = false;
+        document.getElementById('mobile-menu').classList.add('hidden');
 
         // Reset if going to Services
         if (view === 'SERVICES') {
             this.selectedCategory = null;
-            document.getElementById('ai-input').value = '';
+            const aiInput = document.getElementById('ai-input');
+            if(aiInput) aiInput.value = '';
         }
 
         // Render Technicians if navigating there
         if (view === 'TECHNICIANS') {
             this.renderTechnicians();
         }
+
+        // Re-render icons after DOM change
+        if (typeof lucide !== 'undefined') lucide.createIcons();
     }
 
-    updateMobileNav() {
-        const navBtns = document.querySelectorAll('.nav-btn');
-        navBtns.forEach((btn, index) => {
-            btn.classList.remove('active');
-            // Mapping index 0: Landing, 1: Services, 2: Register
-            if (this.currentView === 'LANDING' && index === 0) btn.classList.add('active');
-            if (this.currentView === 'SERVICES' && index === 1) btn.classList.add('active');
-            if (this.currentView === 'TECHNICIANS' && index === 1) btn.classList.add('active'); // Techs stays on Services icon
-            if (this.currentView === 'REGISTER' && index === 2) btn.classList.add('active');
-        });
-        lucide.createIcons();
+    toggleMenu() {
+        this.isMenuOpen = !this.isMenuOpen;
+        const menu = document.getElementById('mobile-menu');
+        if (this.isMenuOpen) {
+            menu.classList.remove('hidden');
+        } else {
+            menu.classList.add('hidden');
+        }
+        if (typeof lucide !== 'undefined') lucide.createIcons();
     }
 
     selectCategory(categoryId, message = '') {
@@ -170,60 +173,39 @@ class NicaTasksApp {
         this.renderTechnicians();
     }
 
-    fillAi(text) {
+    fillSearch(text) {
         const input = document.getElementById('ai-input');
         input.value = text;
-        this.handleAiSearch();
+        this.handleLocalSearch();
     }
 
-    async handleAiSearch() {
+    // New Local Search Logic (replaces AI)
+    handleLocalSearch() {
         const input = document.getElementById('ai-input');
-        const btn = document.getElementById('ai-btn');
-        const iconContainer = document.getElementById('ai-icon-container');
-        const text = input.value.trim();
+        const text = input.value.trim().toLowerCase();
 
         if (!text) return;
 
-        // Loading state
-        btn.disabled = true;
-        btn.innerHTML = `<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i>`;
-        lucide.createIcons();
+        // Simple keyword matching
+        let bestMatch = 'Instalaciones'; // Default fallback
+        let found = false;
 
-        try {
-            const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-            
-            const prompt = `
-              Actúa como un coordinador de servicios para el hogar en Nicaragua.
-              Problema: "${text}".
-              
-              1. Clasifica en: 'Electricidad', 'Fontanería', 'Instalaciones'. Si no encaja, usa 'Instalaciones'.
-              2. Genera un mensaje para WhatsApp al técnico (jerga nica educada).
-              
-              Responde SOLO JSON: {"category": "String", "techMessage": "String"}
-            `;
-
-            const response = await ai.models.generateContent({
-              model: 'gemini-3-flash-preview',
-              contents: prompt,
-              config: { responseMimeType: "application/json" }
-            });
-
-            const result = JSON.parse(response.text);
-            this.selectCategory(result.category, result.techMessage);
-
-        } catch (e) {
-            console.error(e);
-            // Fallback
-            this.selectCategory('Instalaciones', `Hola, necesito ayuda con: ${text}`);
-        } finally {
-            btn.disabled = false;
-            btn.innerHTML = `<i data-lucide="arrow-right" class="w-5 h-5"></i>`;
-            lucide.createIcons();
+        for (const cat of CATEGORIES) {
+            if (cat.keywords.some(k => text.includes(k))) {
+                bestMatch = cat.id;
+                found = true;
+                break;
+            }
         }
+
+        const message = `Hola, busco ayuda con: ${input.value}`;
+        this.selectCategory(bestMatch, message);
     }
 
     renderCategories() {
         const container = document.getElementById('categories-grid');
+        if(!container) return;
+
         container.innerHTML = CATEGORIES.map(cat => `
             <button onclick="app.selectCategory('${cat.id}')" class="group relative overflow-hidden bg-white p-8 rounded-[2rem] border border-slate-100 hover:border-indigo-100 shadow-sm hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 text-left h-64 flex flex-col justify-between">
                 <div class="absolute top-0 right-0 w-48 h-48 bg-gradient-to-br ${cat.gradient} opacity-10 rounded-bl-[4rem] group-hover:scale-125 transition-transform duration-700 ease-out"></div>
@@ -244,17 +226,19 @@ class NicaTasksApp {
     renderTechnicians() {
         // Title update
         const titleEl = document.getElementById('tech-list-title');
-        titleEl.textContent = this.selectedCategory ? this.selectedCategory : 'Todos los Expertos';
+        if(titleEl) titleEl.textContent = this.selectedCategory ? this.selectedCategory : 'Todos los Expertos';
 
         // City Filters
         const filtersContainer = document.getElementById('city-filters');
-        filtersContainer.innerHTML = CITIES.map(c => `
-            <button 
-                onclick="app.setCity('${c.name}')" 
-                class="px-5 py-2.5 rounded-xl text-sm font-bold transition-all ${this.selectedCity === c.name ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-500 hover:bg-slate-50'} ${!c.active ? 'opacity-40 cursor-not-allowed pointer-events-none' : ''}">
-                ${c.name}
-            </button>
-        `).join('');
+        if(filtersContainer) {
+            filtersContainer.innerHTML = CITIES.map(c => `
+                <button 
+                    onclick="app.setCity('${c.name}')" 
+                    class="px-5 py-2.5 rounded-xl text-sm font-bold transition-all ${this.selectedCity === c.name ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-500 hover:bg-slate-50'} ${!c.active ? 'opacity-40 cursor-not-allowed pointer-events-none' : ''}">
+                    ${c.name}
+                </button>
+            `).join('');
+        }
 
         // Filtering Logic
         const filtered = MOCK_TECHNICIANS.filter(t => 
@@ -262,9 +246,11 @@ class NicaTasksApp {
             t.city === this.selectedCity
         );
 
-        document.getElementById('tech-count-label').textContent = `${filtered.length} profesionales disponibles.`;
+        const countLabel = document.getElementById('tech-count-label');
+        if(countLabel) countLabel.textContent = `${filtered.length} profesionales disponibles.`;
 
         const grid = document.getElementById('tech-grid');
+        if(!grid) return;
         
         if (filtered.length === 0) {
             grid.innerHTML = `
@@ -316,7 +302,9 @@ class NicaTasksApp {
                 </div>
             `).join('');
         }
-        lucide.createIcons();
+        
+        // Ensure icons render in the new cards
+        if (typeof lucide !== 'undefined') lucide.createIcons();
     }
 
     contactTech(phone, name) {
@@ -327,6 +315,7 @@ class NicaTasksApp {
 
     renderRegisterOptions() {
         const select = document.getElementById('reg-job');
+        if(!select) return;
         select.innerHTML = CATEGORIES.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
     }
 
