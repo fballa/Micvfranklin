@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NicaTasks | Servicios en Managua</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Google GenAI Import Map -->
+    <script type="importmap">
+{
+  "imports": {
+    "@google/genai": "https://esm.sh/@google/genai@0.1.0",
+    "react": "https://esm.sh/react@^19.2.4",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+    "react/": "https://esm.sh/react@^19.2.4/",
+    "lucide-react": "https://esm.sh/lucide-react@^0.563.0"
+  }
+}
+</script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="/index.css">
+</head>
+<body class="bg-slate-50/50 text-slate-900 selection:bg-indigo-200 selection:text-indigo-900 font-sans">
+
+    <!-- Header -->
+    <header class="sticky top-0 z-50 glass-panel border-b border-slate-200/50 transition-all duration-300">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-3 cursor-pointer group" onclick="app.navigate('LANDING')">
+                <div class="bg-gradient-to-tr from-indigo-600 to-violet-600 p-2.5 rounded-2xl shadow-lg shadow-indigo-500/20 group-hover:shadow-indigo-500/40 transition-all duration-300 group-hover:scale-105 group-hover:-rotate-3">
+                    <i data-lucide="shield-check" class="w-6 h-6 text-white"></i>
+                </div>
+                <span class="text-2xl font-extrabold text-slate-900 tracking-tight font-heading group-hover:text-indigo-600 transition-colors">NicaTasks</span>
+            </div>
+
+            <!-- Desktop Nav -->
+            <nav class="hidden md:flex items-center gap-1 bg-white/50 p-1.5 rounded-full border border-slate-200/50 backdrop-blur-md">
+                <button onclick="app.navigate('LANDING')" class="px-5 py-2.5 rounded-full text-sm font-bold text-slate-600 hover:text-indigo-700 hover:bg-white hover:shadow-sm transition-all">Inicio</button>
+                <button onclick="app.navigate('SERVICES')" class="px-5 py-2.5 rounded-full text-sm font-bold text-slate-600 hover:text-indigo-700 hover:bg-white hover:shadow-sm transition-all">Servicios</button>
+                <button onclick="app.navigate('REGISTER')" class="px-5 py-2.5 rounded-full text-sm font-bold bg-slate-900 text-white hover:bg-indigo-600 shadow-md hover:shadow-lg transition-all ml-2">Soy Técnico</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main id="main-container" class="w-full relative min-h-screen pb-32">
+        
+        <!-- VIEW: LANDING -->
+        <div id="view-landing" class="view-section animate-fade-in">
+            <!-- Hero -->
+            <div class="relative overflow-hidden bg-slate-900 text-white pt-20 pb-32 md:pt-32 md:pb-48 px-6 rounded-b-[3.5rem] shadow-2xl shadow-indigo-900/20">
+                <div class="absolute top-0 right-0 -mr-20 -mt-20 w-[30rem] h-[30rem] rounded-full bg-gradient-to-br from-indigo-600 to-purple-600 blur-[120px] opacity-40 animate-pulse"></div>
+                <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-[25rem] h-[25rem] rounded-full bg-cyan-600 blur-[100px] opacity-30"></div>
+                
+                <div class="relative max-w-5xl mx-auto text-center z-10">
+                    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 backdrop-blur-xl border border-white/10 text-sm font-semibold tracking-wide text-indigo-200 mb-8 cursor-default">
+                        <span class="relative flex h-2.5 w-2.5">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
+                        </span>
+                        <span>DISPONIBLE EN MANAGUA</span>
+                    </div>
+                    
+                    <h1 class="text-5xl md:text-7xl font-extrabold mb-8 leading-[1.1] tracking-tight">
+                        Reparaciones domésticas <br class="hidden md:block"/>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 via-white to-indigo-300">al instante</span>
+                    </h1>
+                    
+                    <p class="text-slate-300 mb-12 max-w-2xl mx-auto text-xl font-light leading-relaxed">
+                        La plataforma de 2026 que conecta tu hogar con técnicos verificados en segundos.
+                    </p>
+                    
+                    <div class="flex flex-col sm:flex-row gap-5 justify-center items-center">
+                        <button onclick="app.navigate('SERVICES')" class="w-full sm:w-auto bg-white text-indigo-950 font-bold py-5 px-10 rounded-2xl shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1 flex items-center justify-center gap-3 group text-lg">
+                            <i data-lucide="search" class="w-6 h-6 group-hover:scale-110 transition-transform text-indigo-600"></i>
+                            Buscar Técnico
+                        </button>
+                        <button onclick="app.navigate('REGISTER')" class="w-full sm:w-auto bg-transparent border-2 border-slate-700 hover:border-white text-white font-bold py-5 px-10 rounded-2xl transition-all hover:bg-white/5 text-lg">
+                            Soy Técnico
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats & Content -->
+            <div class="max-w-7xl mx-auto px-4 w-full -mt-20 relative z-20 space-y-24 mb-20">
+                <!-- Stats Bar -->
+                <div class="bg-white rounded-[2.5rem] shadow-xl shadow-slate-200/50 p-10 flex flex-col md:flex-row justify-between items-center gap-8 border border-slate-100">
+                    <div class="flex items-center gap-5">
+                        <div class="p-4 rounded-2xl bg-blue-100 text-blue-600"><i data-lucide="briefcase" class="w-8 h-8"></i></div>
+                        <div><div class="text-3xl font-extrabold text-slate-900">150+</div><div class="text-sm text-slate-500 font-bold uppercase tracking-wider">Técnicos Activos</div></div>
+                    </div>
+                    <div class="flex items-center gap-5">
+                        <div class="p-4 rounded-2xl bg-green-100 text-green-600"><i data-lucide="check-circle-2" class="w-8 h-8"></i></div>
+                        <div><div class="text-3xl font-extrabold text-slate-900">1.2k</div><div class="text-sm text-slate-500 font-bold uppercase tracking-wider">Trabajos Completados</div></div>
+                    </div>
+                    <div class="flex items-center gap-5">
+                        <div class="p-4 rounded-2xl bg-amber-100 text-amber-600"><i data-lucide="star" class="w-8 h-8"></i></div>
+                        <div><div class="text-3xl font-extrabold text-slate-900">4.8</div><div class="text-sm text-slate-500 font-bold uppercase tracking-wider">Rating Promedio</div></div>
+                    </div>
+                </div>
+
+                <!-- How it Works -->
+                <div>
+                    <div class="text-center mb-12">
+                        <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 mb-4 tracking-tight">¿Cómo funciona NicaTasks?</h2>
+                        <p class="text-slate-500 text-lg max-w-2xl mx-auto">Tres pasos simples para resolver cualquier problema.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+                        <!-- Card 1 -->
+                        <div class="flex flex-col items-center text-center bg-white p-8 rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-500 group">
+                            <div class="w-24 h-24 bg-slate-50 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform border-4 border-white shadow-lg">
+                                <i data-lucide="smartphone" class="w-10 h-10 text-indigo-600"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-900 mb-3">1. Describe el problema</h3>
+                            <p class="text-slate-500 leading-relaxed">Usa nuestra IA o selecciona una categoría.</p>
+                        </div>
+                        <!-- Card 2 -->
+                        <div class="flex flex-col items-center text-center bg-white p-8 rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-500 group">
+                            <div class="w-24 h-24 bg-slate-50 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform border-4 border-white shadow-lg">
+                                <i data-lucide="user" class="w-10 h-10 text-indigo-600"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-900 mb-3">2. Elige tu técnico</h3>
+                            <p class="text-slate-500 leading-relaxed">Compara perfiles, precios y reseñas.</p>
+                        </div>
+                        <!-- Card 3 -->
+                        <div class="flex flex-col items-center text-center bg-white p-8 rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-500 group">
+                            <div class="w-24 h-24 bg-slate-50 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform border-4 border-white shadow-lg">
+                                <i data-lucide="zap" class="w-10 h-10 text-indigo-600"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-900 mb-3">3. Listo y Seguro</h3>
+                            <p class="text-slate-500 leading-relaxed">Contacta por WhatsApp y paga directo.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW: SERVICES -->
+        <div id="view-services" class="view-section hidden pt-12 animate-fade-in">
+            <div class="p-6 max-w-5xl mx-auto">
+                <div class="mb-16 text-center">
+                    <h2 class="text-4xl font-extrabold text-slate-900 mb-6">¿Qué podemos resolver hoy?</h2>
+                    
+                    <!-- AI Input -->
+                    <div class="relative max-w-2xl mx-auto group">
+                        <div class="absolute inset-0 bg-gradient-to-r from-indigo-500 via-purple-500 to-indigo-500 rounded-2xl blur-lg opacity-30 group-hover:opacity-50 transition duration-500 animate-pulse"></div>
+                        <div class="relative bg-white rounded-2xl shadow-2xl flex items-center p-3 border border-slate-100">
+                            <div class="p-3 text-indigo-600 bg-indigo-50 rounded-xl mr-3" id="ai-icon-container">
+                                <i data-lucide="sparkles" class="w-6 h-6"></i>
+                            </div>
+                            <input type="text" id="ai-input" 
+                                placeholder="Describe tu problema (ej: 'El grifo de la cocina gotea')" 
+                                class="flex-1 p-2 bg-transparent outline-none text-lg text-slate-700 placeholder:text-slate-400 font-medium"
+                                onkeypress="if(event.key === 'Enter') app.handleAiSearch()">
+                            <button onclick="app.handleAiSearch()" id="ai-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white p-4 rounded-xl transition-all shadow-lg shadow-indigo-200">
+                                <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="mt-4 flex justify-center gap-3">
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Sugerencias:</span>
+                        <button onclick="app.fillAi('Instalar Abanico')" class="text-xs text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md hover:bg-indigo-100 font-medium">Instalar Abanico</button>
+                        <button onclick="app.fillAi('Fuga de agua')" class="text-xs text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md hover:bg-indigo-100 font-medium">Fuga de agua</button>
+                    </div>
+                </div>
+
+                <h3 class="text-2xl font-bold text-slate-900 mb-8 px-2">Explorar Categorías</h3>
+                <div id="categories-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Categories injected by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW: TECHNICIANS -->
+        <div id="view-technicians" class="view-section hidden pt-12 animate-fade-in">
+            <div class="p-4 md:p-8 max-w-6xl mx-auto">
+                <!-- Filters -->
+                <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+                    <div>
+                        <div class="flex items-center gap-2 text-sm font-bold text-indigo-600 mb-2 uppercase tracking-wider">
+                            <i data-lucide="briefcase" class="w-4 h-4"></i> Directorio
+                        </div>
+                        <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900" id="tech-list-title">Todos los Expertos</h2>
+                        <p class="text-slate-500 mt-2 text-lg" id="tech-count-label">Cargando...</p>
+                    </div>
+                    <div class="flex items-center gap-2 bg-white p-2 rounded-2xl shadow-sm border border-slate-200 w-fit" id="city-filters">
+                        <!-- Filters injected by JS -->
+                    </div>
+                </div>
+
+                <!-- Grid -->
+                <div id="tech-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Cards injected by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW: REGISTER -->
+        <div id="view-register" class="view-section hidden pt-12 animate-fade-in">
+            <div class="p-4 md:p-8 max-w-3xl mx-auto">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-0 bg-white rounded-[2.5rem] shadow-2xl shadow-slate-200/50 overflow-hidden border border-slate-100">
+                    <!-- Info -->
+                    <div class="bg-slate-900 p-10 text-white flex flex-col justify-between relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-64 h-64 bg-indigo-600 rounded-full blur-[80px] -mr-16 -mt-16 opacity-40"></div>
+                        <div class="relative z-10">
+                            <div class="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center mb-6 backdrop-blur-md border border-white/10">
+                                <i data-lucide="briefcase" class="w-7 h-7 text-indigo-300"></i>
+                            </div>
+                            <h2 class="text-3xl font-extrabold mb-4 leading-tight">Únete a la red #1</h2>
+                            <p class="text-indigo-200 text-lg leading-relaxed mb-8">Consigue más clientes, maneja tu horario y cobra lo justo.</p>
+                            <ul class="space-y-4">
+                                <li class="flex items-center gap-3 text-sm font-medium"><i data-lucide="check-circle-2" class="text-green-400 w-5 h-5"></i> Pagos directos</li>
+                                <li class="flex items-center gap-3 text-sm font-medium"><i data-lucide="check-circle-2" class="text-green-400 w-5 h-5"></i> 0% comisión (3 meses)</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- Form -->
+                    <div class="p-10">
+                        <h3 class="text-xl font-bold text-slate-900 mb-6">Solicitud de Ingreso</h3>
+                        <form onsubmit="app.handleRegister(event)" class="space-y-5">
+                            <div class="space-y-2">
+                                <label class="text-xs font-bold text-slate-500 uppercase tracking-wide">Nombre Completo</label>
+                                <input required type="text" class="w-full p-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all font-medium text-slate-900" placeholder="Ej. Juan Pérez">
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-xs font-bold text-slate-500 uppercase tracking-wide">WhatsApp</label>
+                                <input required type="tel" class="w-full p-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all font-medium text-slate-900" placeholder="8888-8888">
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-xs font-bold text-slate-500 uppercase tracking-wide">Especialidad</label>
+                                <select id="reg-job" class="w-full p-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none font-medium text-slate-700">
+                                    <!-- Options injected -->
+                                </select>
+                            </div>
+                            <button type="submit" class="w-full bg-indigo-600 text-white font-bold py-4 rounded-xl hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-500/30 flex items-center justify-center gap-2 mt-6 group">
+                                Enviar Solicitud <i data-lucide="arrow-right" class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-950 text-slate-300 pt-20 pb-10 rounded-t-[3rem] mt-auto">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+                <div class="col-span-1 md:col-span-2 space-y-6">
+                    <div class="flex items-center gap-2 text-white">
+                        <div class="bg-indigo-600 p-2 rounded-lg"><i data-lucide="shield-check" class="w-5 h-5"></i></div>
+                        <span class="text-2xl font-extrabold tracking-tight">NicaTasks</span>
+                    </div>
+                    <p class="text-slate-400 text-lg leading-relaxed max-w-sm">Reinventando cómo Nicaragua contrata servicios domésticos.</p>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-6 text-lg">Contacto</h4>
+                    <ul class="space-y-4 text-sm">
+                        <li class="flex items-start gap-3"><i data-lucide="map-pin" class="w-5 h-5 text-indigo-500"></i><span>Edificio Pellas, Piso 4<br>Managua</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="mail" class="w-5 h-5 text-indigo-500"></i><span>hola@nicatasks.com</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="pt-8 border-t border-slate-800 text-center text-sm text-slate-500">
+                <p>&copy; 2026 NicaTasks. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Mobile Nav Dock -->
+    <div class="fixed bottom-8 left-0 right-0 z-50 flex justify-center px-4 md:hidden pointer-events-none">
+        <div class="pointer-events-auto flex items-center gap-1 bg-white/95 backdrop-blur-2xl border border-white/40 shadow-2xl shadow-slate-300/60 rounded-[2.5rem] px-3 py-3 ring-1 ring-slate-100">
+            <button onclick="app.navigate('LANDING')" class="nav-btn w-16 h-16 rounded-3xl flex flex-col items-center justify-center text-slate-400 hover:text-slate-600">
+                <i data-lucide="home" class="w-6 h-6"></i>
+            </button>
+            <button onclick="app.navigate('SERVICES')" class="nav-btn w-16 h-16 rounded-3xl flex flex-col items-center justify-center text-slate-400 hover:text-slate-600">
+                <i data-lucide="sparkles" class="w-6 h-6"></i>
+            </button>
+            <button onclick="app.navigate('REGISTER')" class="nav-btn w-16 h-16 rounded-3xl flex flex-col items-center justify-center text-slate-400 hover:text-slate-600">
+                <i data-lucide="briefcase" class="w-6 h-6"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Application Script -->
+    <script type="module" src="js/app.js"></script>
+<script type="module" src="/index.tsx"></script>
+</body>
+</html>
