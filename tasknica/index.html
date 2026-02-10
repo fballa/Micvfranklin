@@ -14,21 +14,19 @@
     <!-- Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
-    <!-- Google GenAI Import Map -->
-    <script type="importmap">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+<script type="importmap">
 {
   "imports": {
-    "@google/genai": "https://esm.sh/@google/genai@0.1.0",
-    "react": "https://esm.sh/react@^19.2.4",
+    "lucide-react": "https://esm.sh/lucide-react@^0.563.0",
     "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
     "react/": "https://esm.sh/react@^19.2.4/",
-    "lucide-react": "https://esm.sh/lucide-react@^0.563.0"
+    "react": "https://esm.sh/react@^19.2.4",
+    "@google/genai": "https://esm.sh/@google/genai@^1.40.0"
   }
 }
 </script>
-
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="css/styles.css">
 <link rel="stylesheet" href="/index.css">
 </head>
 <body class="bg-slate-50/50 text-slate-900 selection:bg-indigo-200 selection:text-indigo-900 font-sans">
@@ -36,6 +34,7 @@
     <!-- Header -->
     <header class="sticky top-0 z-50 glass-panel border-b border-slate-200/50 transition-all duration-300">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
+            <!-- Logo -->
             <div class="flex items-center gap-3 cursor-pointer group" onclick="app.navigate('LANDING')">
                 <div class="bg-gradient-to-tr from-indigo-600 to-violet-600 p-2.5 rounded-2xl shadow-lg shadow-indigo-500/20 group-hover:shadow-indigo-500/40 transition-all duration-300 group-hover:scale-105 group-hover:-rotate-3">
                     <i data-lucide="shield-check" class="w-6 h-6 text-white"></i>
@@ -43,17 +42,37 @@
                 <span class="text-2xl font-extrabold text-slate-900 tracking-tight font-heading group-hover:text-indigo-600 transition-colors">NicaTasks</span>
             </div>
 
-            <!-- Desktop Nav -->
-            <nav class="hidden md:flex items-center gap-1 bg-white/50 p-1.5 rounded-full border border-slate-200/50 backdrop-blur-md">
+            <!-- Desktop Nav (Visible only on lg screens) -->
+            <nav class="hidden lg:flex items-center gap-1 bg-white/50 p-1.5 rounded-full border border-slate-200/50 backdrop-blur-md">
                 <button onclick="app.navigate('LANDING')" class="px-5 py-2.5 rounded-full text-sm font-bold text-slate-600 hover:text-indigo-700 hover:bg-white hover:shadow-sm transition-all">Inicio</button>
                 <button onclick="app.navigate('SERVICES')" class="px-5 py-2.5 rounded-full text-sm font-bold text-slate-600 hover:text-indigo-700 hover:bg-white hover:shadow-sm transition-all">Servicios</button>
                 <button onclick="app.navigate('REGISTER')" class="px-5 py-2.5 rounded-full text-sm font-bold bg-slate-900 text-white hover:bg-indigo-600 shadow-md hover:shadow-lg transition-all ml-2">Soy Técnico</button>
             </nav>
+
+            <!-- Mobile/Tablet Hamburger Button -->
+            <button onclick="app.toggleMenu()" class="lg:hidden p-2 text-slate-600 hover:text-indigo-600 transition-colors focus:outline-none">
+                <i data-lucide="menu" class="w-8 h-8"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Menu Overlay (Hidden by default) -->
+        <div id="mobile-menu" class="hidden absolute top-20 left-0 w-full glass-panel border-b border-slate-200/50 shadow-xl animate-fade-in-down lg:hidden">
+            <div class="flex flex-col p-6 gap-4">
+                <button onclick="app.navigate('LANDING')" class="flex items-center gap-4 p-4 rounded-xl hover:bg-white/50 transition-all text-lg font-bold text-slate-700">
+                    <i data-lucide="home" class="w-6 h-6 text-indigo-500"></i> Inicio
+                </button>
+                <button onclick="app.navigate('SERVICES')" class="flex items-center gap-4 p-4 rounded-xl hover:bg-white/50 transition-all text-lg font-bold text-slate-700">
+                    <i data-lucide="sparkles" class="w-6 h-6 text-indigo-500"></i> Servicios
+                </button>
+                <button onclick="app.navigate('REGISTER')" class="flex items-center gap-4 p-4 rounded-xl bg-slate-900 text-white shadow-lg transition-all text-lg font-bold">
+                    <i data-lucide="briefcase" class="w-6 h-6"></i> Soy Técnico
+                </button>
+            </div>
         </div>
     </header>
 
     <!-- Main Content Area -->
-    <main id="main-container" class="w-full relative min-h-screen pb-32">
+    <main id="main-container" class="w-full relative min-h-screen pb-10">
         
         <!-- VIEW: LANDING -->
         <div id="view-landing" class="view-section animate-fade-in">
@@ -123,7 +142,7 @@
                                 <i data-lucide="smartphone" class="w-10 h-10 text-indigo-600"></i>
                             </div>
                             <h3 class="text-xl font-bold text-slate-900 mb-3">1. Describe el problema</h3>
-                            <p class="text-slate-500 leading-relaxed">Usa nuestra IA o selecciona una categoría.</p>
+                            <p class="text-slate-500 leading-relaxed">Usa nuestra búsqueda inteligente o selecciona una categoría.</p>
                         </div>
                         <!-- Card 2 -->
                         <div class="flex flex-col items-center text-center bg-white p-8 rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-500 group">
@@ -152,26 +171,27 @@
                 <div class="mb-16 text-center">
                     <h2 class="text-4xl font-extrabold text-slate-900 mb-6">¿Qué podemos resolver hoy?</h2>
                     
-                    <!-- AI Input -->
+                    <!-- Search Input (No AI API) -->
                     <div class="relative max-w-2xl mx-auto group">
                         <div class="absolute inset-0 bg-gradient-to-r from-indigo-500 via-purple-500 to-indigo-500 rounded-2xl blur-lg opacity-30 group-hover:opacity-50 transition duration-500 animate-pulse"></div>
                         <div class="relative bg-white rounded-2xl shadow-2xl flex items-center p-3 border border-slate-100">
                             <div class="p-3 text-indigo-600 bg-indigo-50 rounded-xl mr-3" id="ai-icon-container">
-                                <i data-lucide="sparkles" class="w-6 h-6"></i>
+                                <i data-lucide="search" class="w-6 h-6"></i>
                             </div>
                             <input type="text" id="ai-input" 
-                                placeholder="Describe tu problema (ej: 'El grifo de la cocina gotea')" 
+                                placeholder="Escribe tu problema (ej: 'no tengo luz' o 'fuga de agua')" 
                                 class="flex-1 p-2 bg-transparent outline-none text-lg text-slate-700 placeholder:text-slate-400 font-medium"
-                                onkeypress="if(event.key === 'Enter') app.handleAiSearch()">
-                            <button onclick="app.handleAiSearch()" id="ai-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white p-4 rounded-xl transition-all shadow-lg shadow-indigo-200">
+                                onkeypress="if(event.key === 'Enter') app.handleLocalSearch()">
+                            <button onclick="app.handleLocalSearch()" id="ai-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white p-4 rounded-xl transition-all shadow-lg shadow-indigo-200">
                                 <i data-lucide="arrow-right" class="w-5 h-5"></i>
                             </button>
                         </div>
                     </div>
                     <div class="mt-4 flex justify-center gap-3">
-                        <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Sugerencias:</span>
-                        <button onclick="app.fillAi('Instalar Abanico')" class="text-xs text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md hover:bg-indigo-100 font-medium">Instalar Abanico</button>
-                        <button onclick="app.fillAi('Fuga de agua')" class="text-xs text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md hover:bg-indigo-100 font-medium">Fuga de agua</button>
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Ejemplos:</span>
+                        <button onclick="app.fillSearch('Instalar Abanico')" class="text-xs text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md hover:bg-indigo-100 font-medium">Instalar Abanico</button>
+                        <button onclick="app.fillSearch('Fuga de agua')" class="text-xs text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md hover:bg-indigo-100 font-medium">Fuga de agua</button>
+                        <button onclick="app.fillSearch('Tomacorriente malo')" class="text-xs text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md hover:bg-indigo-100 font-medium">Tomacorriente malo</button>
                     </div>
                 </div>
 
@@ -185,6 +205,10 @@
         <!-- VIEW: TECHNICIANS -->
         <div id="view-technicians" class="view-section hidden pt-12 animate-fade-in">
             <div class="p-4 md:p-8 max-w-6xl mx-auto">
+                <button onclick="app.navigate('SERVICES')" class="mb-6 flex items-center gap-2 text-slate-500 hover:text-indigo-600 transition-colors font-semibold">
+                    <i data-lucide="chevron-left" class="w-5 h-5"></i> Volver a categorías
+                </button>
+
                 <!-- Filters -->
                 <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
                     <div>
@@ -269,6 +293,7 @@
                     <ul class="space-y-4 text-sm">
                         <li class="flex items-start gap-3"><i data-lucide="map-pin" class="w-5 h-5 text-indigo-500"></i><span>Edificio Pellas, Piso 4<br>Managua</span></li>
                         <li class="flex items-center gap-3"><i data-lucide="mail" class="w-5 h-5 text-indigo-500"></i><span>hola@nicatasks.com</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="phone" class="w-5 h-5 text-indigo-500"></i><span>+505 5888 3348</span></li>
                     </ul>
                 </div>
             </div>
@@ -277,21 +302,6 @@
             </div>
         </div>
     </footer>
-
-    <!-- Mobile Nav Dock -->
-    <div class="fixed bottom-8 left-0 right-0 z-50 flex justify-center px-4 md:hidden pointer-events-none">
-        <div class="pointer-events-auto flex items-center gap-1 bg-white/95 backdrop-blur-2xl border border-white/40 shadow-2xl shadow-slate-300/60 rounded-[2.5rem] px-3 py-3 ring-1 ring-slate-100">
-            <button onclick="app.navigate('LANDING')" class="nav-btn w-16 h-16 rounded-3xl flex flex-col items-center justify-center text-slate-400 hover:text-slate-600">
-                <i data-lucide="home" class="w-6 h-6"></i>
-            </button>
-            <button onclick="app.navigate('SERVICES')" class="nav-btn w-16 h-16 rounded-3xl flex flex-col items-center justify-center text-slate-400 hover:text-slate-600">
-                <i data-lucide="sparkles" class="w-6 h-6"></i>
-            </button>
-            <button onclick="app.navigate('REGISTER')" class="nav-btn w-16 h-16 rounded-3xl flex flex-col items-center justify-center text-slate-400 hover:text-slate-600">
-                <i data-lucide="briefcase" class="w-6 h-6"></i>
-            </button>
-        </div>
-    </div>
 
     <!-- Application Script -->
     <script type="module" src="js/app.js"></script>
