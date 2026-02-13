@@ -102,7 +102,7 @@
 
       /* Hero Animation */
       .hero-fade-in {
-        animation: heroFade 0.8s ease-out forwards;
+        animation: heroFade 1.2s ease-out forwards;
         opacity: 0;
       }
       @keyframes heroFade {
@@ -172,12 +172,12 @@
     </header>
 
     <!-- Hero Section -->
-    <section id="hero" class="relative w-full h-screen overflow-hidden bg-deepBlue hero-fade-in">
+    <section id="hero" class="relative w-full h-screen flex items-center justify-center overflow-hidden bg-deepBlue hero-fade-in">
       <!-- Video Container -->
       <div class="absolute inset-0 w-full h-full z-0">
          <video 
            id="hero-video"
-           class="w-full h-full object-cover scale-105 transition-transform duration-100 ease-out will-change-transform" 
+           class="w-full h-full object-cover scale-105 will-change-transform" 
            autoplay 
            muted 
            loop 
@@ -189,19 +189,53 @@
          </video>
       </div>
       
-      <!-- Cinematic Overlay (Gradient & Subtle Effects) -->
-      <div class="absolute inset-0 pointer-events-none z-10" 
-           style="background: linear-gradient(to bottom, rgba(15, 23, 42, 0.45), rgba(15, 23, 42, 0.35)); backdrop-filter: blur(0.5px) contrast(1.05);">
+      <!-- Cinematic Overlay (Gradient) -->
+      <div class="absolute inset-0 z-10 pointer-events-none" 
+           style="background: linear-gradient(to bottom, rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.65)); backdrop-filter: blur(0.5px);">
+      </div>
+
+      <!-- Particles Canvas (Z-Index fixed to be behind text) -->
+      <canvas id="particle-canvas" class="absolute inset-0 z-10 pointer-events-none opacity-50"></canvas>
+
+      <!-- Content -->
+      <div class="container mx-auto px-6 relative z-20 text-center">
+        <!-- Badge -->
+        <div class="reveal inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-8 backdrop-blur-md shadow-lg group hover:border-electricBlue/30 transition-colors cursor-default">
+          <span class="w-2 h-2 rounded-full bg-growthGreen animate-pulse"></span>
+          <span class="text-sm font-medium text-gray-200 tracking-wide uppercase">Agencia Growth-Tech 2026</span>
+        </div>
+
+        <!-- Title -->
+        <h1 class="reveal delay-100 font-display font-bold text-5xl md:text-7xl lg:text-8xl leading-[1.1] mb-6 tracking-tight text-white drop-shadow-2xl">
+          Inteligencia de Software.<br />
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-electricBlue to-cyan-400">
+            Crecimiento Digital.
+          </span>
+        </h1>
+
+        <!-- Subtitle -->
+        <p class="reveal delay-200 text-lg md:text-xl text-gray-300 max-w-2xl mx-auto mb-10 leading-relaxed drop-shadow-md">
+          Construimos tecnología escalable y estrategias de marketing orientadas al rendimiento.
+        </p>
+
+        <!-- Buttons -->
+        <div class="reveal delay-300 flex flex-col sm:flex-row items-center justify-center gap-4">
+          <a href="#contact" class="inline-flex items-center justify-center rounded-full font-medium transition-all duration-300 h-14 px-10 text-lg bg-conversionOrange text-white shadow-[0_0_15px_rgba(249,115,22,0.3)] hover:shadow-[0_0_25px_rgba(249,115,22,0.6)] hover:scale-105 w-full sm:w-auto gap-2 group border border-transparent">
+            Iniciar Proyecto
+            <i data-lucide="arrow-right" class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+          </a>
+          <a href="#services" class="inline-flex items-center justify-center rounded-full font-medium transition-all duration-300 h-14 px-10 text-lg border-2 border-electricBlue text-electricBlue hover:bg-electricBlue hover:text-white hover:shadow-[0_0_20px_rgba(37,99,235,0.4)] w-full sm:w-auto gap-2 group bg-deepBlue/30 backdrop-blur-sm">
+            Explorar Servicios
+            <i data-lucide="code" class="w-5 h-5 group-hover:rotate-12 transition-transform"></i>
+          </a>
+        </div>
       </div>
       
       <!-- Scroll Indicator -->
-      <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2 animate-bounce opacity-70">
+      <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2 animate-bounce opacity-80">
          <span class="text-[10px] text-white/80 tracking-[0.2em] uppercase font-light font-display">Scroll</span>
-         <div class="w-[1px] h-12 bg-gradient-to-b from-white/60 to-transparent"></div>
+         <div class="w-[1px] h-12 bg-gradient-to-b from-electricBlue to-transparent"></div>
       </div>
-      
-      <!-- Smooth Transition to Next Section -->
-      <div class="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-nightBlue to-transparent z-20"></div>
     </section>
 
     <!-- Software Section -->
@@ -796,6 +830,76 @@
           navbar.classList.add('py-6');
         }
       });
+
+      // Particle Canvas Animation
+      const canvas = document.getElementById('particle-canvas');
+      const ctx = canvas.getContext('2d');
+      
+      let width, height;
+      let particles = [];
+      
+      function resize() {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+      }
+      
+      function initParticles() {
+        particles = [];
+        const particleCount = 60;
+        for (let i = 0; i < particleCount; i++) {
+          particles.push({
+            x: Math.random() * width,
+            y: Math.random() * height,
+            vx: (Math.random() - 0.5) * 0.5,
+            vy: (Math.random() - 0.5) * 0.5,
+            size: Math.random() * 2 + 1,
+            alpha: Math.random() * 0.5 + 0.1
+          });
+        }
+      }
+
+      function animateParticles() {
+        ctx.clearRect(0, 0, width, height);
+        
+        particles.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+
+          if (p.x < 0 || p.x > width) p.vx *= -1;
+          if (p.y < 0 || p.y > height) p.vy *= -1;
+
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(37, 99, 235, ${p.alpha})`;
+          ctx.fill();
+        });
+
+        // Connections
+        particles.forEach((p, i) => {
+          for (let j = i + 1; j < particles.length; j++) {
+            const p2 = particles[j];
+            const dx = p.x - p2.x;
+            const dy = p.y - p2.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+
+            if (dist < 150) {
+              ctx.beginPath();
+              ctx.strokeStyle = `rgba(37, 99, 235, ${0.1 - dist / 1500})`;
+              ctx.lineWidth = 1;
+              ctx.moveTo(p.x, p.y);
+              ctx.lineTo(p2.x, p2.y);
+              ctx.stroke();
+            }
+          }
+        });
+        
+        requestAnimationFrame(animateParticles);
+      }
+
+      window.addEventListener('resize', resize);
+      resize();
+      initParticles();
+      animateParticles();
 
       // Parallax Effect for Video
       window.addEventListener('scroll', () => {
