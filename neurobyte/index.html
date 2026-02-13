@@ -30,12 +30,25 @@
             },
             backgroundImage: {
               'hero-pattern': "url('https://picsum.photos/1920/1080?grayscale&blur=2')",
-              'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+            },
+            animation: {
+              'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+              'float': 'float 6s ease-in-out infinite',
+            },
+            keyframes: {
+              float: {
+                '0%, 100%': { transform: 'translateY(0)' },
+                '50%': { transform: 'translateY(-20px)' },
+              }
             }
           }
         }
       }
     </script>
+
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
     <style>
       body {
         background-color: #0A0F1F;
@@ -57,29 +70,779 @@
       ::-webkit-scrollbar-thumb:hover {
         background: #00D4FF;
       }
+
       .glass-panel {
         background: rgba(255, 255, 255, 0.03);
         backdrop-filter: blur(10px);
         -webkit-backdrop-filter: blur(10px);
         border: 1px solid rgba(255, 255, 255, 0.05);
       }
-    </style>
-    <script type="importmap">
-    {
-      "imports": {
-        "react": "https://esm.sh/react@^19.2.4",
-        "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
-        "react/": "https://esm.sh/react@^19.2.4/",
-        "lucide-react": "https://esm.sh/lucide-react@^0.563.0",
-        "framer-motion": "https://esm.sh/framer-motion@^12.34.0"
+      
+      /* Animation Classes */
+      .reveal {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
       }
-    }
-    </script>
-  <link rel="stylesheet" href="/index.css">
+      .reveal.active {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* Custom Cursor */
+      .cursor-dot,
+      .cursor-outline {
+        position: fixed;
+        top: 0;
+        left: 0;
+        transform: translate(-50%, -50%);
+        border-radius: 50%;
+        z-index: 9999;
+        pointer-events: none;
+      }
+      .cursor-dot {
+        width: 8px;
+        height: 8px;
+        background-color: #00FFA3;
+      }
+      .cursor-outline {
+        width: 32px;
+        height: 32px;
+        border: 1px solid #00D4FF;
+        transition: width 0.2s, height 0.2s, background-color 0.2s;
+        mix-blend-mode: difference;
+      }
+      
+      @media (max-width: 768px) {
+        .cursor-dot, .cursor-outline {
+          display: none;
+        }
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "lucide-react": "https://esm.sh/lucide-react@^0.563.0",
+    "react": "https://esm.sh/react@^19.2.4",
+    "react/": "https://esm.sh/react@^19.2.4/",
+    "framer-motion": "https://esm.sh/framer-motion@^12.34.0"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
 </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="./index.tsx"></script>
+  <body class="bg-main text-smoke selection:bg-electric selection:text-black">
+    
+    <!-- This root div is kept to prevent errors if external scripts look for it, but the app content is below -->
+    <div id="root" style="display:none;"></div>
+
+    <!-- Custom Cursor Elements -->
+    <div class="cursor-dot" id="cursor-dot"></div>
+    <div class="cursor-outline" id="cursor-outline"></div>
+
+    <!-- Navbar -->
+    <nav id="navbar" class="fixed w-full z-40 transition-all duration-300 py-6 bg-transparent">
+      <div class="container mx-auto px-6 flex justify-between items-center">
+        <!-- Logo -->
+        <a href="#home" class="flex items-center gap-3 group">
+          <div class="relative">
+            <img 
+              src="https://micvfranklin.netlify.app/anuncios/neurobyte.jpg" 
+              alt="NeuroByte Logo" 
+              class="w-10 h-10 rounded-full object-cover border-2 border-electric shadow-[0_0_15px_rgba(0,212,255,0.5)] group-hover:shadow-[0_0_25px_rgba(0,212,255,0.8)] transition-shadow duration-300"
+            />
+          </div>
+          <span class="text-xl font-display font-bold tracking-wider text-white">
+            NeuroByte<span class="text-electric"> Studio</span>
+          </span>
+        </a>
+
+        <!-- Desktop Menu -->
+        <div class="hidden md:flex items-center gap-8">
+          <a href="#home" class="text-sm font-medium text-smoke/70 hover:text-electric transition-colors relative group">
+            Inicio
+            <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-electric transition-all duration-300 group-hover:w-full"></span>
+          </a>
+          <a href="#software" class="text-sm font-medium text-smoke/70 hover:text-electric transition-colors relative group">
+            Desarrollo
+            <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-electric transition-all duration-300 group-hover:w-full"></span>
+          </a>
+          <a href="#marketing" class="text-sm font-medium text-smoke/70 hover:text-electric transition-colors relative group">
+            Marketing
+            <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-electric transition-all duration-300 group-hover:w-full"></span>
+          </a>
+          <a href="#projects" class="text-sm font-medium text-smoke/70 hover:text-electric transition-colors relative group">
+            Proyectos
+            <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-electric transition-all duration-300 group-hover:w-full"></span>
+          </a>
+          <a href="#methodology" class="text-sm font-medium text-smoke/70 hover:text-electric transition-colors relative group">
+            Nosotros
+            <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-electric transition-all duration-300 group-hover:w-full"></span>
+          </a>
+          <a href="#contact" class="px-6 py-2 bg-gradient-to-r from-neon to-electric text-white font-bold rounded-full text-sm hover:shadow-[0_0_20px_rgba(0,212,255,0.5)] transition-all duration-300 transform hover:-translate-y-0.5">
+            Cotizar Proyecto
+          </a>
+        </div>
+
+        <!-- Mobile Toggle -->
+        <button id="menu-toggle" class="md:hidden text-white hover:text-electric transition-colors">
+          <i data-lucide="menu"></i>
+        </button>
+      </div>
+
+      <!-- Mobile Menu Overlay -->
+      <div id="mobile-menu" class="fixed inset-0 bg-main pt-24 px-6 overflow-hidden z-30 transform translate-y-full transition-transform duration-300 md:hidden flex flex-col items-center gap-6">
+          <button id="menu-close" class="absolute top-6 right-6 text-white hover:text-electric">
+             <i data-lucide="x"></i>
+          </button>
+          <a href="#home" class="mobile-link text-2xl font-display font-medium text-white hover:text-electric transition-colors">Inicio</a>
+          <a href="#software" class="mobile-link text-2xl font-display font-medium text-white hover:text-electric transition-colors">Desarrollo</a>
+          <a href="#marketing" class="mobile-link text-2xl font-display font-medium text-white hover:text-electric transition-colors">Marketing</a>
+          <a href="#projects" class="mobile-link text-2xl font-display font-medium text-white hover:text-electric transition-colors">Proyectos</a>
+          <a href="#methodology" class="mobile-link text-2xl font-display font-medium text-white hover:text-electric transition-colors">Nosotros</a>
+          <a href="#contact" class="mobile-link mt-4 px-8 py-3 bg-neon text-white font-bold rounded-full w-full text-center">Cotizar Proyecto</a>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="relative h-screen w-full flex items-center justify-center overflow-hidden">
+        <!-- Background -->
+        <div class="absolute inset-0 z-0 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')">
+            <div class="absolute inset-0 bg-main/80 backdrop-blur-sm"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-main via-main/50 to-transparent"></div>
+        </div>
+        
+        <!-- Grid Pattern -->
+        <div class="absolute inset-0 z-0 opacity-10" style="background-image: linear-gradient(rgba(0, 212, 255, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 212, 255, 0.1) 1px, transparent 1px); background-size: 50px 50px;"></div>
+
+        <!-- Content -->
+        <div class="container mx-auto px-6 relative z-10 text-center reveal active">
+            <span class="inline-block px-4 py-1 mb-6 border border-electric/30 rounded-full bg-electric/10 text-electric text-sm tracking-widest uppercase font-semibold backdrop-blur-md">
+                Innovación Digital 2026
+            </span>
+            <h1 class="text-5xl md:text-7xl lg:text-8xl font-display font-bold text-white mb-6 leading-tight">
+                Transformamos Ideas en <br />
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-electric to-neon">
+                  Software y Crecimiento
+                </span>
+            </h1>
+            <p class="text-lg md:text-xl text-smoke/70 max-w-2xl mx-auto mb-10 font-light">
+                Desarrollo tecnológico de alto nivel + estrategias de marketing basadas en datos para escalar tu negocio en la era digital.
+            </p>
+
+            <div class="flex flex-col md:flex-row gap-4 justify-center items-center">
+                <a href="#contact" class="group relative px-8 py-4 bg-white text-main font-bold rounded-full overflow-hidden flex items-center gap-2">
+                    <span class="relative z-10 flex items-center gap-2">
+                        Agendar Reunión <i data-lucide="arrow-right" class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+                    </span>
+                    <div class="absolute inset-0 bg-gradient-to-r from-electric to-tech opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
+                </a>
+                
+                <a href="#software" class="px-8 py-4 border border-white/20 text-white rounded-full hover:bg-white/5 hover:border-white/50 transition-all duration-300 backdrop-blur-sm">
+                    Ver Servicios
+                </a>
+            </div>
+        </div>
+
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-white/50 animate-bounce">
+            <i data-lucide="chevron-down" class="w-8 h-8"></i>
+        </div>
+    </section>
+
+    <!-- Software Services -->
+    <section id="software" class="py-24 relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-1/3 h-1/3 bg-electric/10 blur-[100px] rounded-full pointer-events-none"></div>
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="mb-16 max-w-3xl reveal">
+                <h2 class="text-4xl md:text-5xl font-display font-bold text-white mb-4">Construimos soluciones digitales escalables</h2>
+                <p class="text-xl text-smoke/60">Desarrollo de Software Full Stack de alto rendimiento para empresas modernas.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Service Cards -->
+                <div class="glass-panel p-8 rounded-2xl group hover:border-white/20 transition-all duration-300 reveal hover:-translate-y-2">
+                    <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-electric to-blue-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg">
+                        <i data-lucide="globe" class="text-white w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-3 group-hover:text-electric transition-colors">Desarrollo Web Full Stack</h3>
+                    <p class="text-smoke/70 mb-6">Aplicaciones robustas y escalables con arquitecturas modernas.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="text-xs font-mono py-1 px-3 rounded-full bg-white/5 text-smoke/50 border border-white/5">React</span>
+                        <span class="text-xs font-mono py-1 px-3 rounded-full bg-white/5 text-smoke/50 border border-white/5">Next.js</span>
+                    </div>
+                </div>
+                <!-- More cards... -->
+                <div class="glass-panel p-8 rounded-2xl group hover:border-white/20 transition-all duration-300 reveal hover:-translate-y-2">
+                    <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-electric to-blue-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg">
+                        <i data-lucide="code-2" class="text-white w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-3 group-hover:text-electric transition-colors">Apps Personalizadas</h3>
+                    <p class="text-smoke/70 mb-6">Soluciones a medida para resolver problemas complejos de negocio.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="text-xs font-mono py-1 px-3 rounded-full bg-white/5 text-smoke/50 border border-white/5">SaaS</span>
+                        <span class="text-xs font-mono py-1 px-3 rounded-full bg-white/5 text-smoke/50 border border-white/5">Cloud</span>
+                    </div>
+                </div>
+                 <div class="glass-panel p-8 rounded-2xl group hover:border-white/20 transition-all duration-300 reveal hover:-translate-y-2">
+                    <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-electric to-blue-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg">
+                        <i data-lucide="server" class="text-white w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-3 group-hover:text-electric transition-colors">Desarrollo de APIs</h3>
+                    <p class="text-smoke/70 mb-6">Interconexión eficiente entre sistemas con seguridad de alto nivel.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="text-xs font-mono py-1 px-3 rounded-full bg-white/5 text-smoke/50 border border-white/5">REST</span>
+                        <span class="text-xs font-mono py-1 px-3 rounded-full bg-white/5 text-smoke/50 border border-white/5">GraphQL</span>
+                    </div>
+                </div>
+                 <div class="glass-panel p-8 rounded-2xl group hover:border-white/20 transition-all duration-300 reveal hover:-translate-y-2">
+                    <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-electric to-blue-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg">
+                        <i data-lucide="shopping-cart" class="text-white w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-3 group-hover:text-electric transition-colors">E-commerce Avanzado</h3>
+                    <p class="text-smoke/70 mb-6">Tiendas online optimizadas para la conversión y alto tráfico.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="text-xs font-mono py-1 px-3 rounded-full bg-white/5 text-smoke/50 border border-white/5">Shopify</span>
+                        <span class="text-xs font-mono py-1 px-3 rounded-full bg-white/5 text-smoke/50 border border-white/5">Stripe</span>
+                    </div>
+                </div>
+                 <div class="glass-panel p-8 rounded-2xl group hover:border-white/20 transition-all duration-300 reveal hover:-translate-y-2">
+                    <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-electric to-blue-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg">
+                        <i data-lucide="cpu" class="text-white w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-3 group-hover:text-electric transition-colors">Automatización & IA</h3>
+                    <p class="text-smoke/70 mb-6">Optimización de procesos mediante scripts inteligentes y modelos de IA.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="text-xs font-mono py-1 px-3 rounded-full bg-white/5 text-smoke/50 border border-white/5">Python</span>
+                        <span class="text-xs font-mono py-1 px-3 rounded-full bg-white/5 text-smoke/50 border border-white/5">AI</span>
+                    </div>
+                </div>
+                 <div class="glass-panel p-8 rounded-2xl group hover:border-white/20 transition-all duration-300 reveal hover:-translate-y-2">
+                    <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-electric to-blue-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg">
+                        <i data-lucide="database" class="text-white w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-3 group-hover:text-electric transition-colors">Dashboards & BI</h3>
+                    <p class="text-smoke/70 mb-6">Visualización de datos en tiempo real para la toma de decisiones.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="text-xs font-mono py-1 px-3 rounded-full bg-white/5 text-smoke/50 border border-white/5">Analytics</span>
+                        <span class="text-xs font-mono py-1 px-3 rounded-full bg-white/5 text-smoke/50 border border-white/5">Big Data</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Marketing Services -->
+    <section id="marketing" class="py-24 relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-1/3 h-1/3 bg-neon/10 blur-[100px] rounded-full pointer-events-none"></div>
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="mb-16 max-w-3xl reveal">
+                <h2 class="text-4xl md:text-5xl font-display font-bold text-white mb-4">Estrategias digitales que generan resultados</h2>
+                <p class="text-xl text-smoke/60">Marketing basado en datos, automatización y crecimiento real.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Service Cards -->
+                 <div class="glass-panel p-8 rounded-2xl group hover:border-white/20 transition-all duration-300 reveal hover:-translate-y-2">
+                    <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-neon to-purple-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg">
+                        <i data-lucide="target" class="text-white w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-3 group-hover:text-neon transition-colors">Performance Marketing</h3>
+                    <p class="text-smoke/70 mb-6">Campañas de pago optimizadas para maximizar el ROI.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="text-xs font-mono py-1 px-3 rounded-full bg-white/5 text-smoke/50 border border-white/5">Meta Ads</span>
+                        <span class="text-xs font-mono py-1 px-3 rounded-full bg-white/5 text-smoke/50 border border-white/5">Google Ads</span>
+                    </div>
+                </div>
+                 <div class="glass-panel p-8 rounded-2xl group hover:border-white/20 transition-all duration-300 reveal hover:-translate-y-2">
+                    <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-neon to-purple-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg">
+                        <i data-lucide="search" class="text-white w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-3 group-hover:text-neon transition-colors">SEO Técnico</h3>
+                    <p class="text-smoke/70 mb-6">Posicionamiento orgánico basado en arquitectura y contenido.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="text-xs font-mono py-1 px-3 rounded-full bg-white/5 text-smoke/50 border border-white/5">Audit</span>
+                        <span class="text-xs font-mono py-1 px-3 rounded-full bg-white/5 text-smoke/50 border border-white/5">Keywords</span>
+                    </div>
+                </div>
+                 <div class="glass-panel p-8 rounded-2xl group hover:border-white/20 transition-all duration-300 reveal hover:-translate-y-2">
+                    <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-neon to-purple-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg">
+                        <i data-lucide="trending-up" class="text-white w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-3 group-hover:text-neon transition-colors">Growth Marketing</h3>
+                    <p class="text-smoke/70 mb-6">Estrategias de crecimiento acelerado mediante experimentación.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="text-xs font-mono py-1 px-3 rounded-full bg-white/5 text-smoke/50 border border-white/5">A/B Testing</span>
+                        <span class="text-xs font-mono py-1 px-3 rounded-full bg-white/5 text-smoke/50 border border-white/5">Funnel</span>
+                    </div>
+                </div>
+                 <div class="glass-panel p-8 rounded-2xl group hover:border-white/20 transition-all duration-300 reveal hover:-translate-y-2">
+                    <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-neon to-purple-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg">
+                        <i data-lucide="mail" class="text-white w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-3 group-hover:text-neon transition-colors">Email Automation</h3>
+                    <p class="text-smoke/70 mb-6">Secuencias automatizadas para nutrir leads y clientes.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="text-xs font-mono py-1 px-3 rounded-full bg-white/5 text-smoke/50 border border-white/5">CRM</span>
+                        <span class="text-xs font-mono py-1 px-3 rounded-full bg-white/5 text-smoke/50 border border-white/5">Drip</span>
+                    </div>
+                </div>
+                 <div class="glass-panel p-8 rounded-2xl group hover:border-white/20 transition-all duration-300 reveal hover:-translate-y-2">
+                    <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-neon to-purple-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg">
+                        <i data-lucide="share-2" class="text-white w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-3 group-hover:text-neon transition-colors">Social Media Ads</h3>
+                    <p class="text-smoke/70 mb-6">Creatividad y estrategia para dominar las redes sociales.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="text-xs font-mono py-1 px-3 rounded-full bg-white/5 text-smoke/50 border border-white/5">Content</span>
+                        <span class="text-xs font-mono py-1 px-3 rounded-full bg-white/5 text-smoke/50 border border-white/5">Viral</span>
+                    </div>
+                </div>
+                 <div class="glass-panel p-8 rounded-2xl group hover:border-white/20 transition-all duration-300 reveal hover:-translate-y-2">
+                    <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-neon to-purple-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg">
+                        <i data-lucide="bar-chart-3" class="text-white w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-3 group-hover:text-neon transition-colors">Analítica & Data</h3>
+                    <p class="text-smoke/70 mb-6">Medición exhaustiva de cada interacción del usuario.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="text-xs font-mono py-1 px-3 rounded-full bg-white/5 text-smoke/50 border border-white/5">GA4</span>
+                        <span class="text-xs font-mono py-1 px-3 rounded-full bg-white/5 text-smoke/50 border border-white/5">Looker</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio -->
+    <section id="projects" class="py-24 bg-black/20 relative">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-16 reveal">
+                <div>
+                    <span class="text-neon font-bold tracking-wider uppercase text-sm">Portfolio</span>
+                    <h2 class="text-4xl md:text-5xl font-display font-bold text-white mt-2">Proyectos Destacados</h2>
+                </div>
+                <button class="hidden md:block px-6 py-2 border-b border-electric text-electric hover:text-white transition-colors pb-1">Ver todos los proyectos</button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Project 1 -->
+                <div class="group relative h-[400px] rounded-2xl overflow-hidden cursor-pointer reveal">
+                    <img src="https://picsum.photos/id/4/800/600" alt="FinTech Dashboard Pro" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-main via-main/20 to-transparent opacity-60 group-hover:opacity-90 transition-opacity duration-300"></div>
+                    <div class="absolute inset-0 p-8 flex flex-col justify-end transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                        <span class="text-electric font-mono text-sm mb-2 opacity-0 group-hover:opacity-100 transition-opacity delay-100">SaaS / Web App</span>
+                        <h3 class="text-2xl font-bold text-white mb-2">FinTech Dashboard Pro</h3>
+                        <div class="h-0 group-hover:h-auto overflow-hidden transition-all duration-300">
+                            <p class="text-smoke/80 text-sm mb-4 border-l-2 border-tech pl-3">+40% eficiencia operativa</p>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="text-xs bg-white/10 px-2 py-1 rounded text-white">React</span>
+                                <span class="text-xs bg-white/10 px-2 py-1 rounded text-white">D3.js</span>
+                            </div>
+                            <button class="flex items-center gap-2 text-sm font-bold text-white hover:text-tech transition-colors">
+                                Ver Caso <i data-lucide="external-link" class="w-3 h-3"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                 <!-- Project 2 -->
+                <div class="group relative h-[400px] rounded-2xl overflow-hidden cursor-pointer reveal">
+                    <img src="https://picsum.photos/id/180/800/600" alt="EcoMarket Global" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-main via-main/20 to-transparent opacity-60 group-hover:opacity-90 transition-opacity duration-300"></div>
+                    <div class="absolute inset-0 p-8 flex flex-col justify-end transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                        <span class="text-electric font-mono text-sm mb-2 opacity-0 group-hover:opacity-100 transition-opacity delay-100">E-commerce</span>
+                        <h3 class="text-2xl font-bold text-white mb-2">EcoMarket Global</h3>
+                        <div class="h-0 group-hover:h-auto overflow-hidden transition-all duration-300">
+                            <p class="text-smoke/80 text-sm mb-4 border-l-2 border-tech pl-3">3x ventas primer trimestre</p>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="text-xs bg-white/10 px-2 py-1 rounded text-white">Next.js</span>
+                                <span class="text-xs bg-white/10 px-2 py-1 rounded text-white">Stripe</span>
+                            </div>
+                            <button class="flex items-center gap-2 text-sm font-bold text-white hover:text-tech transition-colors">
+                                Ver Caso <i data-lucide="external-link" class="w-3 h-3"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                 <!-- Project 3 -->
+                <div class="group relative h-[400px] rounded-2xl overflow-hidden cursor-pointer reveal">
+                    <img src="https://picsum.photos/id/20/800/600" alt="Logistics AI Core" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-main via-main/20 to-transparent opacity-60 group-hover:opacity-90 transition-opacity duration-300"></div>
+                    <div class="absolute inset-0 p-8 flex flex-col justify-end transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                        <span class="text-electric font-mono text-sm mb-2 opacity-0 group-hover:opacity-100 transition-opacity delay-100">Gestión Empresarial</span>
+                        <h3 class="text-2xl font-bold text-white mb-2">Logistics AI Core</h3>
+                        <div class="h-0 group-hover:h-auto overflow-hidden transition-all duration-300">
+                            <p class="text-smoke/80 text-sm mb-4 border-l-2 border-tech pl-3">Reducción 20% costos</p>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="text-xs bg-white/10 px-2 py-1 rounded text-white">Python</span>
+                                <span class="text-xs bg-white/10 px-2 py-1 rounded text-white">FastAPI</span>
+                            </div>
+                            <button class="flex items-center gap-2 text-sm font-bold text-white hover:text-tech transition-colors">
+                                Ver Caso <i data-lucide="external-link" class="w-3 h-3"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+             <div class="mt-8 text-center md:hidden">
+                <button class="px-6 py-3 border border-electric text-electric rounded-full">
+                    Ver todos los proyectos
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Methodology -->
+    <section id="methodology" class="py-24 relative overflow-hidden">
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-electric/5 blur-[120px] rounded-full pointer-events-none"></div>
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="text-center mb-20 reveal">
+                <h2 class="text-4xl md:text-5xl font-display font-bold text-white mb-4">Nuestra Metodología</h2>
+                <p class="text-smoke/60 max-w-2xl mx-auto">Un proceso probado y optimizado para garantizar entregas exitosas y resultados medibles.</p>
+            </div>
+            
+            <div class="relative">
+                 <div class="absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-transparent via-electric/50 to-transparent"></div>
+                 
+                 <div class="space-y-12">
+                     <!-- Step 1 -->
+                     <div class="flex flex-col md:flex-row items-start md:flex-row-reverse gap-8 md:gap-0 relative reveal">
+                         <div class="md:w-1/2 pl-12 md:pl-0 md:px-12 text-left md:text-right">
+                             <div class="md:text-left">
+                                 <div class="flex items-center gap-4 mb-2 md:justify-start">
+                                     <span class="text-6xl font-display font-bold text-white/5 absolute -top-4 md:left-8 z-0">01</span>
+                                     <h3 class="text-2xl font-bold text-white relative z-10">Discovery & Estrategia</h3>
+                                 </div>
+                                 <p class="text-smoke/70 relative z-10">Entendemos tu negocio, analizamos datos y definimos el norte estratégico.</p>
+                             </div>
+                         </div>
+                         <div class="absolute left-4 md:left-1/2 transform -translate-x-1/2 flex items-center justify-center w-4 h-4 rounded-full bg-main border-2 border-electric shadow-[0_0_15px_rgba(0,212,255,0.8)] z-20 mt-2"></div>
+                         <div class="md:w-1/2"></div>
+                     </div>
+
+                     <!-- Step 2 -->
+                     <div class="flex flex-col md:flex-row items-start gap-8 md:gap-0 relative reveal">
+                         <div class="md:w-1/2 pl-12 md:pl-0 md:px-12 text-left md:text-right">
+                             <div class="md:text-right">
+                                 <div class="flex items-center gap-4 mb-2 md:justify-end">
+                                     <span class="text-6xl font-display font-bold text-white/5 absolute -top-4 md:right-8 z-0">02</span>
+                                     <h3 class="text-2xl font-bold text-white relative z-10">Arquitectura & UX/UI</h3>
+                                 </div>
+                                 <p class="text-smoke/70 relative z-10">Diseñamos la base técnica y la experiencia visual centrada en el usuario.</p>
+                             </div>
+                         </div>
+                         <div class="absolute left-4 md:left-1/2 transform -translate-x-1/2 flex items-center justify-center w-4 h-4 rounded-full bg-main border-2 border-electric shadow-[0_0_15px_rgba(0,212,255,0.8)] z-20 mt-2"></div>
+                         <div class="md:w-1/2"></div>
+                     </div>
+
+                     <!-- Step 3 -->
+                     <div class="flex flex-col md:flex-row items-start md:flex-row-reverse gap-8 md:gap-0 relative reveal">
+                         <div class="md:w-1/2 pl-12 md:pl-0 md:px-12 text-left md:text-right">
+                             <div class="md:text-left">
+                                 <div class="flex items-center gap-4 mb-2 md:justify-start">
+                                     <span class="text-6xl font-display font-bold text-white/5 absolute -top-4 md:left-8 z-0">03</span>
+                                     <h3 class="text-2xl font-bold text-white relative z-10">Desarrollo Ágil</h3>
+                                 </div>
+                                 <p class="text-smoke/70 relative z-10">Sprints iterativos con código limpio, escalable y moderno.</p>
+                             </div>
+                         </div>
+                         <div class="absolute left-4 md:left-1/2 transform -translate-x-1/2 flex items-center justify-center w-4 h-4 rounded-full bg-main border-2 border-electric shadow-[0_0_15px_rgba(0,212,255,0.8)] z-20 mt-2"></div>
+                         <div class="md:w-1/2"></div>
+                     </div>
+                     
+                     <!-- Step 4 -->
+                     <div class="flex flex-col md:flex-row items-start gap-8 md:gap-0 relative reveal">
+                         <div class="md:w-1/2 pl-12 md:pl-0 md:px-12 text-left md:text-right">
+                             <div class="md:text-right">
+                                 <div class="flex items-center gap-4 mb-2 md:justify-end">
+                                     <span class="text-6xl font-display font-bold text-white/5 absolute -top-4 md:right-8 z-0">04</span>
+                                     <h3 class="text-2xl font-bold text-white relative z-10">Testing & QA</h3>
+                                 </div>
+                                 <p class="text-smoke/70 relative z-10">Pruebas rigurosas para asegurar un producto libre de errores.</p>
+                             </div>
+                         </div>
+                         <div class="absolute left-4 md:left-1/2 transform -translate-x-1/2 flex items-center justify-center w-4 h-4 rounded-full bg-main border-2 border-electric shadow-[0_0_15px_rgba(0,212,255,0.8)] z-20 mt-2"></div>
+                         <div class="md:w-1/2"></div>
+                     </div>
+
+                     <!-- Step 5 -->
+                     <div class="flex flex-col md:flex-row items-start md:flex-row-reverse gap-8 md:gap-0 relative reveal">
+                         <div class="md:w-1/2 pl-12 md:pl-0 md:px-12 text-left md:text-right">
+                             <div class="md:text-left">
+                                 <div class="flex items-center gap-4 mb-2 md:justify-start">
+                                     <span class="text-6xl font-display font-bold text-white/5 absolute -top-4 md:left-8 z-0">05</span>
+                                     <h3 class="text-2xl font-bold text-white relative z-10">Lanzamiento & Growth</h3>
+                                 </div>
+                                 <p class="text-smoke/70 relative z-10">Despliegue a producción y activación de estrategias de crecimiento.</p>
+                             </div>
+                         </div>
+                         <div class="absolute left-4 md:left-1/2 transform -translate-x-1/2 flex items-center justify-center w-4 h-4 rounded-full bg-main border-2 border-electric shadow-[0_0_15px_rgba(0,212,255,0.8)] z-20 mt-2"></div>
+                         <div class="md:w-1/2"></div>
+                     </div>
+                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="py-20 border-y border-white/5 bg-white/[0.02]">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="flex flex-col items-center text-center p-6 rounded-2xl hover:bg-white/5 transition-colors duration-300 reveal">
+                    <div class="w-16 h-16 rounded-full bg-main border border-white/10 flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(122,0,255,0.15)] group-hover:scale-110 transition-transform">
+                        <i data-lucide="bar-chart-3" class="w-8 h-8 text-tech"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">Data Driven</h3>
+                    <p class="text-smoke/60 text-sm leading-relaxed">No adivinamos. Tomamos decisiones basadas en métricas reales.</p>
+                </div>
+                 <div class="flex flex-col items-center text-center p-6 rounded-2xl hover:bg-white/5 transition-colors duration-300 reveal">
+                    <div class="w-16 h-16 rounded-full bg-main border border-white/10 flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(122,0,255,0.15)] group-hover:scale-110 transition-transform">
+                        <i data-lucide="zap" class="w-8 h-8 text-tech"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">Tech Stack Moderno</h3>
+                    <p class="text-smoke/60 text-sm leading-relaxed">Usamos las últimas tecnologías para garantizar longevidad.</p>
+                </div>
+                 <div class="flex flex-col items-center text-center p-6 rounded-2xl hover:bg-white/5 transition-colors duration-300 reveal">
+                    <div class="w-16 h-16 rounded-full bg-main border border-white/10 flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(122,0,255,0.15)] group-hover:scale-110 transition-transform">
+                        <i data-lucide="rocket" class="w-8 h-8 text-tech"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">Escalabilidad</h3>
+                    <p class="text-smoke/60 text-sm leading-relaxed">Sistemas preparados para crecer junto con tu negocio.</p>
+                </div>
+                 <div class="flex flex-col items-center text-center p-6 rounded-2xl hover:bg-white/5 transition-colors duration-300 reveal">
+                    <div class="w-16 h-16 rounded-full bg-main border border-white/10 flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(122,0,255,0.15)] group-hover:scale-110 transition-transform">
+                        <i data-lucide="layout" class="w-8 h-8 text-tech"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">Integración Total</h3>
+                    <p class="text-smoke/60 text-sm leading-relaxed">Unimos marketing y desarrollo en un solo ecosistema.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="py-24 bg-main relative overflow-hidden">
+        <div class="container mx-auto px-6">
+            <h2 class="text-center text-4xl font-display font-bold text-white mb-16 reveal">
+                Lo que dicen nuestros <span class="text-electric">socios</span>
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="glass-panel p-8 rounded-2xl relative reveal">
+                    <i data-lucide="quote" class="absolute top-8 right-8 text-white/10 w-10 h-10"></i>
+                    <p class="text-smoke/80 text-lg mb-8 italic relative z-10">"Llevaron nuestra infraestructura al siguiente nivel. La velocidad de la nueva app es impresionante."</p>
+                    <div class="flex items-center gap-4">
+                        <img src="https://picsum.photos/id/1005/100/100" alt="Carlos" class="w-12 h-12 rounded-full border border-electric/30" />
+                        <div>
+                            <h4 class="text-white font-bold">Carlos Méndez</h4>
+                            <p class="text-xs text-smoke/50 uppercase tracking-wide">CEO @ FinTech Latam</p>
+                        </div>
+                    </div>
+                </div>
+                 <div class="glass-panel p-8 rounded-2xl relative reveal">
+                    <i data-lucide="quote" class="absolute top-8 right-8 text-white/10 w-10 h-10"></i>
+                    <p class="text-smoke/80 text-lg mb-8 italic relative z-10">"Las campañas automatizadas han triplicado nuestro retorno de inversión en solo 3 meses."</p>
+                    <div class="flex items-center gap-4">
+                        <img src="https://picsum.photos/id/338/100/100" alt="Laura" class="w-12 h-12 rounded-full border border-electric/30" />
+                        <div>
+                            <h4 class="text-white font-bold">Laura Torres</h4>
+                            <p class="text-xs text-smoke/50 uppercase tracking-wide">Marketing Director @ Retail Group</p>
+                        </div>
+                    </div>
+                </div>
+                 <div class="glass-panel p-8 rounded-2xl relative reveal">
+                    <i data-lucide="quote" class="absolute top-8 right-8 text-white/10 w-10 h-10"></i>
+                    <p class="text-smoke/80 text-lg mb-8 italic relative z-10">"Entienden perfectamente el lenguaje de las startups: rápido, eficiente y de altísima calidad."</p>
+                    <div class="flex items-center gap-4">
+                        <img src="https://picsum.photos/id/64/100/100" alt="David" class="w-12 h-12 rounded-full border border-electric/30" />
+                        <div>
+                            <h4 class="text-white font-bold">David Chen</h4>
+                            <p class="text-xs text-smoke/50 uppercase tracking-wide">Founder @ StartUp X</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section id="contact" class="py-24 relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-r from-neon/20 to-electric/20 backdrop-blur-3xl"></div>
+        <div class="container mx-auto px-6 relative z-10 text-center reveal">
+            <div class="max-w-4xl mx-auto glass-panel p-12 rounded-3xl border border-white/20 shadow-[0_0_50px_rgba(0,0,0,0.5)]">
+                <h2 class="text-4xl md:text-6xl font-display font-bold text-white mb-6">
+                    ¿Listo para escalar tu negocio con <span class="text-transparent bg-clip-text bg-gradient-to-r from-tech to-electric">tecnología</span>?
+                </h2>
+                <p class="text-xl text-smoke/80 mb-10 max-w-2xl mx-auto">
+                    Hablemos hoy mismo y diseñemos la estrategia digital que te llevará al siguiente nivel en 2026.
+                </p>
+                <a href="https://wa.me/50558883346" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-3 px-8 py-4 bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-lg rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg shadow-green-900/20">
+                    <i data-lucide="message-circle" class="w-6 h-6"></i>
+                    Hablar por WhatsApp
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black py-16 border-t border-white/10">
+      <div class="container mx-auto px-6">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+          <!-- Brand -->
+          <div class="col-span-1 md:col-span-1">
+            <a href="#home" class="flex items-center gap-2 mb-6">
+              <img 
+                src="https://micvfranklin.netlify.app/anuncios/neurobyte.jpg" 
+                alt="NeuroByte Logo" 
+                class="w-8 h-8 rounded-full object-cover border border-electric"
+              />
+              <span class="text-xl font-display font-bold text-white">
+                NeuroByte<span class="text-electric"> Studio</span>
+              </span>
+            </a>
+            <p class="text-smoke/50 text-sm mb-6">
+              Agencia de desarrollo y marketing digital del futuro. 
+              Creamos soluciones que impulsan resultados reales.
+            </p>
+            <div class="flex gap-4">
+              <a href="#" class="text-smoke/50 hover:text-white transition-colors"><i data-lucide="linkedin" class="w-5 h-5"></i></a>
+              <a href="#" class="text-smoke/50 hover:text-white transition-colors"><i data-lucide="twitter" class="w-5 h-5"></i></a>
+              <a href="#" class="text-smoke/50 hover:text-white transition-colors"><i data-lucide="instagram" class="w-5 h-5"></i></a>
+              <a href="#" class="text-smoke/50 hover:text-white transition-colors"><i data-lucide="github" class="w-5 h-5"></i></a>
+            </div>
+          </div>
+
+          <!-- Links -->
+          <div>
+            <h4 class="text-white font-bold mb-6">Servicios</h4>
+            <ul class="space-y-4 text-sm text-smoke/60">
+              <li><a href="#software" class="hover:text-electric transition-colors">Desarrollo Web</a></li>
+              <li><a href="#software" class="hover:text-electric transition-colors">Apps Móviles</a></li>
+              <li><a href="#marketing" class="hover:text-electric transition-colors">Performance Marketing</a></li>
+              <li><a href="#contact" class="hover:text-electric transition-colors">Consultoría Tecnológica</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 class="text-white font-bold mb-6">Compañía</h4>
+            <ul class="space-y-4 text-sm text-smoke/60">
+              <li><a href="#methodology" class="hover:text-electric transition-colors">Nosotros</a></li>
+              <li><a href="#projects" class="hover:text-electric transition-colors">Proyectos</a></li>
+              <li><a href="#" class="hover:text-electric transition-colors">Blog</a></li>
+              <li><a href="#" class="hover:text-electric transition-colors">Carreras</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 class="text-white font-bold mb-6">Contacto</h4>
+            <ul class="space-y-4 text-sm text-smoke/60">
+              <li>info@neurobyte.studio</li>
+              <li>+505 5888 3346</li>
+              <li>Managua, Nicaragua</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-smoke/40">
+          <p>&copy; 2026 NeuroByte Studio. Todos los derechos reservados.</p>
+          <div class="flex gap-6 mt-4 md:mt-0">
+            <a href="#" class="hover:text-white">Privacidad</a>
+            <a href="#" class="hover:text-white">Términos</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- WhatsApp Button -->
+    <a href="https://wa.me/50558883346" target="_blank" rel="noopener noreferrer" class="fixed bottom-6 right-6 z-50 flex items-center justify-center w-14 h-14 bg-[#25D366] rounded-full shadow-[0_0_20px_rgba(37,211,102,0.5)] hover:shadow-[0_0_30px_rgba(37,211,102,0.8)] transition-all duration-300 group hover:scale-110">
+        <span class="absolute inset-0 rounded-full border border-white/50 animate-ping opacity-75"></span>
+        <i data-lucide="message-circle" class="text-white w-7 h-7 relative z-10"></i>
+    </a>
+
+    <!-- Application Logic -->
+    <script>
+      // Initialize Icons
+      lucide.createIcons();
+
+      // Navbar Scroll Effect
+      const navbar = document.getElementById('navbar');
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+          navbar.classList.add('bg-main/90', 'backdrop-blur-xl', 'border-b', 'border-white/5', 'py-4');
+          navbar.classList.remove('bg-transparent', 'py-6');
+        } else {
+          navbar.classList.remove('bg-main/90', 'backdrop-blur-xl', 'border-b', 'border-white/5', 'py-4');
+          navbar.classList.add('bg-transparent', 'py-6');
+        }
+      });
+
+      // Mobile Menu
+      const menuToggle = document.getElementById('menu-toggle');
+      const menuClose = document.getElementById('menu-close');
+      const mobileMenu = document.getElementById('mobile-menu');
+      const mobileLinks = document.querySelectorAll('.mobile-link');
+
+      function openMenu() {
+        mobileMenu.classList.remove('translate-y-full');
+      }
+
+      function closeMenu() {
+        mobileMenu.classList.add('translate-y-full');
+      }
+
+      menuToggle.addEventListener('click', openMenu);
+      menuClose.addEventListener('click', closeMenu);
+      
+      mobileLinks.forEach(link => {
+          link.addEventListener('click', closeMenu);
+      });
+
+      // Custom Cursor
+      const cursorDot = document.getElementById('cursor-dot');
+      const cursorOutline = document.getElementById('cursor-outline');
+
+      window.addEventListener('mousemove', (e) => {
+        const posX = e.clientX;
+        const posY = e.clientY;
+
+        // Dot follows instantly
+        cursorDot.style.left = `${posX}px`;
+        cursorDot.style.top = `${posY}px`;
+
+        // Outline follows with slight delay (animation handled by CSS transition on .cursor-outline)
+        cursorOutline.style.left = `${posX}px`;
+        cursorOutline.style.top = `${posY}px`;
+      });
+
+      document.addEventListener('mousedown', () => {
+        cursorOutline.style.width = '24px';
+        cursorOutline.style.height = '24px';
+      });
+
+      document.addEventListener('mouseup', () => {
+        cursorOutline.style.width = '32px';
+        cursorOutline.style.height = '32px';
+      });
+
+      // Scroll Reveal Animation
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: "0px"
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('active');
+            observer.unobserve(entry.target); // Only animate once
+          }
+        });
+      }, observerOptions);
+
+      document.querySelectorAll('.reveal').forEach(el => {
+        observer.observe(el);
+      });
+    </script>
   <script type="module" src="/index.tsx"></script>
 </body>
 </html>
