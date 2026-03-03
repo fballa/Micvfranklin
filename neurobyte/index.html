@@ -6,6 +6,9 @@
     <title>NeuroByte Studio | Inteligencia de Software y Crecimiento Digital</title>
     <meta name="description" content="Agencia digital enfocada en Desarrollo de Software y Crecimiento Digital. Inteligencia que impulsa el crecimiento.">
     
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -109,35 +112,24 @@
       <div class="absolute inset-0 w-full h-full z-0">
          <video 
            id="hero-video"
-           class="w-full h-full object-cover scale-105 will-change-transform" 
+           class="w-full h-full object-cover will-change-transform" 
            autoplay 
            muted 
            loop 
            playsinline
-           poster="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" 
+           preload="auto"
          >
             <source src="https://micvfranklin.netlify.app/anuncios/marketing_software.mp4" type="video/mp4">
-            Tu navegador no soporta video HTML5.
          </video>
       </div>
       
-      <!-- Cinematic Overlay (Gradient) -->
+      <!-- Cinematic Overlay (User Requested) -->
       <div class="absolute inset-0 z-10 pointer-events-none" 
-           style="background: linear-gradient(to bottom, rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.65)); backdrop-filter: blur(0.5px);">
+           style="background: linear-gradient(to bottom, rgba(15, 23, 42, 0.45), rgba(15, 23, 42, 0.35)); backdrop-filter: blur(1px);">
       </div>
 
-      <!-- Particles Canvas (Z-Index fixed to be behind text) -->
-      <canvas id="particle-canvas" class="absolute inset-0 z-10 pointer-events-none opacity-50"></canvas>
-
       <!-- Content -->
-      <div class="container mx-auto px-6 relative z-20 text-center">
-        <!-- Badge -->
-        <div class="reveal inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-8 backdrop-blur-md shadow-lg group hover:border-electricBlue/30 transition-colors cursor-default">
-          <span class="w-2 h-2 rounded-full bg-growthGreen animate-pulse"></span>
-          <span class="text-sm font-medium text-gray-200 tracking-wide uppercase">Agencia Growth-Tech 2026</span>
-        </div>
-
-        <!-- Title -->
+      <div class="container mx-auto px-6 relative z-30 text-center">
         <h1 class="reveal delay-100 font-display font-bold text-5xl md:text-7xl lg:text-8xl leading-[1.1] mb-6 tracking-tight text-white drop-shadow-2xl">
           Impulsamos tu negocio con <br />
           <span class="text-transparent bg-clip-text bg-gradient-to-r from-electricBlue to-cyan-400">
@@ -145,120 +137,116 @@
           </span>
         </h1>
 
-        <!-- Subtitle -->
-        <p class="reveal delay-200 text-lg md:text-xl text-gray-300 max-w-2xl mx-auto mb-10 leading-relaxed drop-shadow-md">
+        <p class="reveal delay-200 text-lg md:text-xl text-gray-200 max-w-3xl mx-auto mb-10 leading-relaxed drop-shadow-md">
           Convertimos datos en decisiones y estrategias en crecimiento real.
         </p>
 
-        <!-- Buttons -->
         <div class="reveal delay-300 flex flex-col sm:flex-row items-center justify-center gap-4">
           <a href="#contact" class="inline-flex items-center justify-center rounded-full font-medium transition-all duration-300 h-14 px-10 text-lg bg-conversionOrange text-white shadow-[0_0_15px_rgba(249,115,22,0.3)] hover:shadow-[0_0_25px_rgba(249,115,22,0.6)] hover:scale-105 w-full sm:w-auto gap-2 group border border-transparent">
             Iniciar Proyecto
             <i data-lucide="arrow-right" class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
           </a>
-          <a href="#services" class="inline-flex items-center justify-center rounded-full font-medium transition-all duration-300 h-14 px-10 text-lg border-2 border-electricBlue text-electricBlue hover:bg-electricBlue hover:text-white hover:shadow-[0_0_20px_rgba(37,99,235,0.4)] w-full sm:w-auto gap-2 group bg-deepBlue/30 backdrop-blur-sm">
+          <a href="#services" class="inline-flex items-center justify-center rounded-full font-medium transition-all duration-300 h-14 px-10 text-lg border-2 border-white/20 text-white hover:bg-white/10 hover:border-white/40 w-full sm:w-auto gap-2 group backdrop-blur-sm">
             Explorar Servicios
             <i data-lucide="code" class="w-5 h-5 group-hover:rotate-12 transition-transform"></i>
           </a>
         </div>
       </div>
-      
-      <!-- Scroll Indicator -->
-      <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2 animate-bounce opacity-80">
-         <span class="text-[10px] text-white/80 tracking-[0.2em] uppercase font-light font-display">Scroll</span>
-         <div class="w-[1px] h-12 bg-gradient-to-b from-electricBlue to-transparent"></div>
+
+      <!-- Bottom Gradient Transition (Deep Blue to Light Gray/White) -->
+      <div class="absolute bottom-0 left-0 w-full h-48 z-20 pointer-events-none"
+           style="background: linear-gradient(to bottom, transparent, #F9FAFB);">
       </div>
     </section>
 
-    <!-- Software Section -->
-    <section id="services" class="scroll-mt-24 py-24 bg-nightBlue relative overflow-hidden">
+    <!-- Software Section (Updated to Light Theme for Transition) -->
+    <section id="services" class="scroll-mt-24 py-24 bg-gray-50 relative overflow-hidden">
       <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-electricBlue/20 to-transparent"></div>
-      <div class="absolute bottom-0 right-0 w-[400px] h-[400px] bg-electricBlue/5 rounded-full blur-[100px]"></div>
-
+      
       <div class="container mx-auto px-6 relative z-10">
         <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
           <div class="max-w-2xl">
             <span class="reveal text-electricBlue font-semibold tracking-wider uppercase text-sm mb-2 block">/ Excelencia en Ingeniería</span>
-            <h2 class="reveal delay-100 font-display font-bold text-4xl md:text-5xl text-white">
+            <h2 class="reveal delay-100 font-display font-bold text-4xl md:text-5xl text-gray-900">
               Construimos <span class="text-electricBlue">Tecnología Escalable</span>
             </h2>
           </div>
-          <p class="reveal delay-200 text-gray-400 max-w-md text-lg">
+          <p class="reveal delay-200 text-gray-600 max-w-md text-lg">
             Desde sistemas backend complejos hasta interfaces frontend impresionantes, diseñamos soluciones que perduran.
           </p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <!-- Service Cards -->
-          <div class="reveal delay-100 group relative p-8 rounded-2xl bg-white/5 border border-white/10 hover:border-electricBlue/30 hover:bg-white/[0.07] transition-all duration-300 hover:-translate-y-1">
-            <div class="mb-6 p-3 bg-deepBlue rounded-lg w-fit group-hover:scale-110 transition-transform duration-300 ring-1 ring-white/10">
+          <div class="reveal delay-100 group relative p-8 rounded-2xl bg-white border border-gray-200 shadow-lg shadow-gray-200/50 hover:shadow-xl hover:border-electricBlue/30 transition-all duration-300 hover:-translate-y-1">
+            <div class="mb-6 p-3 bg-blue-50 rounded-lg w-fit group-hover:scale-110 transition-transform duration-300">
               <i data-lucide="terminal" class="w-8 h-8 text-electricBlue"></i>
             </div>
-            <h3 class="font-display font-bold text-xl text-white mb-3 group-hover:text-electricBlue transition-colors">Desarrollo Web a Medida</h3>
-            <p class="text-gray-400 mb-6 leading-relaxed">Aplicaciones React y Next.js de alto rendimiento diseñadas para escalabilidad y velocidad.</p>
+            <h3 class="font-display font-bold text-xl text-gray-900 mb-3 group-hover:text-electricBlue transition-colors">Desarrollo Web a Medida</h3>
+            <p class="text-gray-600 mb-6 leading-relaxed">Aplicaciones React y Next.js de alto rendimiento diseñadas para escalabilidad y velocidad.</p>
             <div class="flex flex-wrap gap-2">
-              <span class="text-xs font-medium px-2 py-1 rounded bg-white/5 text-gray-300 border border-white/5">React</span>
-              <span class="text-xs font-medium px-2 py-1 rounded bg-white/5 text-gray-300 border border-white/5">Node.js</span>
+              <span class="text-xs font-medium px-2 py-1 rounded bg-gray-100 text-gray-600 border border-gray-200">React</span>
+              <span class="text-xs font-medium px-2 py-1 rounded bg-gray-100 text-gray-600 border border-gray-200">Node.js</span>
             </div>
           </div>
 
-          <div class="reveal delay-200 group relative p-8 rounded-2xl bg-white/5 border border-white/10 hover:border-electricBlue/30 hover:bg-white/[0.07] transition-all duration-300 hover:-translate-y-1">
-            <div class="mb-6 p-3 bg-deepBlue rounded-lg w-fit group-hover:scale-110 transition-transform duration-300 ring-1 ring-white/10">
+          <div class="reveal delay-200 group relative p-8 rounded-2xl bg-white border border-gray-200 shadow-lg shadow-gray-200/50 hover:shadow-xl hover:border-electricBlue/30 transition-all duration-300 hover:-translate-y-1">
+            <div class="mb-6 p-3 bg-pink-50 rounded-lg w-fit group-hover:scale-110 transition-transform duration-300">
               <i data-lucide="smartphone" class="w-8 h-8 text-creativeMagenta"></i>
             </div>
-            <h3 class="font-display font-bold text-xl text-white mb-3 group-hover:text-electricBlue transition-colors">Soluciones Móviles</h3>
-            <p class="text-gray-400 mb-6 leading-relaxed">Apps nativas y multiplataforma que ofrecen experiencias de usuario fluidas.</p>
+            <h3 class="font-display font-bold text-xl text-gray-900 mb-3 group-hover:text-electricBlue transition-colors">Soluciones Móviles</h3>
+            <p class="text-gray-600 mb-6 leading-relaxed">Apps nativas y multiplataforma que ofrecen experiencias de usuario fluidas.</p>
             <div class="flex flex-wrap gap-2">
-              <span class="text-xs font-medium px-2 py-1 rounded bg-white/5 text-gray-300 border border-white/5">React Native</span>
-              <span class="text-xs font-medium px-2 py-1 rounded bg-white/5 text-gray-300 border border-white/5">iOS/Android</span>
+              <span class="text-xs font-medium px-2 py-1 rounded bg-gray-100 text-gray-600 border border-gray-200">React Native</span>
+              <span class="text-xs font-medium px-2 py-1 rounded bg-gray-100 text-gray-600 border border-gray-200">iOS/Android</span>
             </div>
           </div>
 
-          <div class="reveal delay-300 group relative p-8 rounded-2xl bg-white/5 border border-white/10 hover:border-electricBlue/30 hover:bg-white/[0.07] transition-all duration-300 hover:-translate-y-1">
-            <div class="mb-6 p-3 bg-deepBlue rounded-lg w-fit group-hover:scale-110 transition-transform duration-300 ring-1 ring-white/10">
+          <div class="reveal delay-300 group relative p-8 rounded-2xl bg-white border border-gray-200 shadow-lg shadow-gray-200/50 hover:shadow-xl hover:border-electricBlue/30 transition-all duration-300 hover:-translate-y-1">
+            <div class="mb-6 p-3 bg-green-50 rounded-lg w-fit group-hover:scale-110 transition-transform duration-300">
               <i data-lucide="cpu" class="w-8 h-8 text-growthGreen"></i>
             </div>
-            <h3 class="font-display font-bold text-xl text-white mb-3 group-hover:text-electricBlue transition-colors">IA y Automatización</h3>
-            <p class="text-gray-400 mb-6 leading-relaxed">Algoritmos inteligentes para automatizar flujos de trabajo y mejorar la toma de decisiones.</p>
+            <h3 class="font-display font-bold text-xl text-gray-900 mb-3 group-hover:text-electricBlue transition-colors">IA y Automatización</h3>
+            <p class="text-gray-600 mb-6 leading-relaxed">Algoritmos inteligentes para automatizar flujos de trabajo y mejorar la toma de decisiones.</p>
             <div class="flex flex-wrap gap-2">
-              <span class="text-xs font-medium px-2 py-1 rounded bg-white/5 text-gray-300 border border-white/5">Python</span>
-              <span class="text-xs font-medium px-2 py-1 rounded bg-white/5 text-gray-300 border border-white/5">OpenAI</span>
+              <span class="text-xs font-medium px-2 py-1 rounded bg-gray-100 text-gray-600 border border-gray-200">Python</span>
+              <span class="text-xs font-medium px-2 py-1 rounded bg-gray-100 text-gray-600 border border-gray-200">OpenAI</span>
             </div>
           </div>
           
-           <div class="reveal delay-100 group relative p-8 rounded-2xl bg-white/5 border border-white/10 hover:border-electricBlue/30 hover:bg-white/[0.07] transition-all duration-300 hover:-translate-y-1">
-            <div class="mb-6 p-3 bg-deepBlue rounded-lg w-fit group-hover:scale-110 transition-transform duration-300 ring-1 ring-white/10">
+           <div class="reveal delay-100 group relative p-8 rounded-2xl bg-white border border-gray-200 shadow-lg shadow-gray-200/50 hover:shadow-xl hover:border-electricBlue/30 transition-all duration-300 hover:-translate-y-1">
+            <div class="mb-6 p-3 bg-cyan-50 rounded-lg w-fit group-hover:scale-110 transition-transform duration-300">
               <i data-lucide="cloud" class="w-8 h-8 text-cyan-400"></i>
             </div>
-            <h3 class="font-display font-bold text-xl text-white mb-3 group-hover:text-electricBlue transition-colors">Arquitectura en la Nube</h3>
-            <p class="text-gray-400 mb-6 leading-relaxed">Diseño de infraestructura en la nube segura y escalable y servicios de migración.</p>
+            <h3 class="font-display font-bold text-xl text-gray-900 mb-3 group-hover:text-electricBlue transition-colors">Arquitectura en la Nube</h3>
+            <p class="text-gray-600 mb-6 leading-relaxed">Diseño de infraestructura en la nube segura y escalable y servicios de migración.</p>
              <div class="flex flex-wrap gap-2">
-              <span class="text-xs font-medium px-2 py-1 rounded bg-white/5 text-gray-300 border border-white/5">AWS</span>
-              <span class="text-xs font-medium px-2 py-1 rounded bg-white/5 text-gray-300 border border-white/5">Azure</span>
+              <span class="text-xs font-medium px-2 py-1 rounded bg-gray-100 text-gray-600 border border-gray-200">AWS</span>
+              <span class="text-xs font-medium px-2 py-1 rounded bg-gray-100 text-gray-600 border border-gray-200">Azure</span>
             </div>
           </div>
 
-          <div class="reveal delay-200 group relative p-8 rounded-2xl bg-white/5 border border-white/10 hover:border-electricBlue/30 hover:bg-white/[0.07] transition-all duration-300 hover:-translate-y-1">
-            <div class="mb-6 p-3 bg-deepBlue rounded-lg w-fit group-hover:scale-110 transition-transform duration-300 ring-1 ring-white/10">
+          <div class="reveal delay-200 group relative p-8 rounded-2xl bg-white border border-gray-200 shadow-lg shadow-gray-200/50 hover:shadow-xl hover:border-electricBlue/30 transition-all duration-300 hover:-translate-y-1">
+            <div class="mb-6 p-3 bg-purple-50 rounded-lg w-fit group-hover:scale-110 transition-transform duration-300">
               <i data-lucide="database" class="w-8 h-8 text-purple-500"></i>
             </div>
-            <h3 class="font-display font-bold text-xl text-white mb-3 group-hover:text-electricBlue transition-colors">Ingeniería Backend</h3>
-            <p class="text-gray-400 mb-6 leading-relaxed">Desarrollo robusto de API y arquitectura de bases de datos para sistemas de alta carga.</p>
+            <h3 class="font-display font-bold text-xl text-gray-900 mb-3 group-hover:text-electricBlue transition-colors">Ingeniería Backend</h3>
+            <p class="text-gray-600 mb-6 leading-relaxed">Desarrollo robusto de API y arquitectura de bases de datos para sistemas de alta carga.</p>
              <div class="flex flex-wrap gap-2">
-              <span class="text-xs font-medium px-2 py-1 rounded bg-white/5 text-gray-300 border border-white/5">PostgreSQL</span>
-              <span class="text-xs font-medium px-2 py-1 rounded bg-white/5 text-gray-300 border border-white/5">Redis</span>
+              <span class="text-xs font-medium px-2 py-1 rounded bg-gray-100 text-gray-600 border border-gray-200">PostgreSQL</span>
+              <span class="text-xs font-medium px-2 py-1 rounded bg-gray-100 text-gray-600 border border-gray-200">Redis</span>
             </div>
           </div>
 
-          <div class="reveal delay-300 group relative p-8 rounded-2xl bg-white/5 border border-white/10 hover:border-electricBlue/30 hover:bg-white/[0.07] transition-all duration-300 hover:-translate-y-1">
-            <div class="mb-6 p-3 bg-deepBlue rounded-lg w-fit group-hover:scale-110 transition-transform duration-300 ring-1 ring-white/10">
+          <div class="reveal delay-300 group relative p-8 rounded-2xl bg-white border border-gray-200 shadow-lg shadow-gray-200/50 hover:shadow-xl hover:border-electricBlue/30 transition-all duration-300 hover:-translate-y-1">
+            <div class="mb-6 p-3 bg-orange-50 rounded-lg w-fit group-hover:scale-110 transition-transform duration-300">
               <i data-lucide="lock" class="w-8 h-8 text-orange-400"></i>
             </div>
-            <h3 class="font-display font-bold text-xl text-white mb-3 group-hover:text-electricBlue transition-colors">Ciberseguridad</h3>
-            <p class="text-gray-400 mb-6 leading-relaxed">Auditoría proactiva de seguridad e implementación para proteger sus activos digitales.</p>
+            <h3 class="font-display font-bold text-xl text-gray-900 mb-3 group-hover:text-electricBlue transition-colors">Ciberseguridad</h3>
+            <p class="text-gray-600 mb-6 leading-relaxed">Auditoría proactiva de seguridad e implementación para proteger sus activos digitales.</p>
              <div class="flex flex-wrap gap-2">
-              <span class="text-xs font-medium px-2 py-1 rounded bg-white/5 text-gray-300 border border-white/5">Auditorías</span>
-              <span class="text-xs font-medium px-2 py-1 rounded bg-white/5 text-gray-300 border border-white/5">Cifrado</span>
+              <span class="text-xs font-medium px-2 py-1 rounded bg-gray-100 text-gray-600 border border-gray-200">Auditorías</span>
+              <span class="text-xs font-medium px-2 py-1 rounded bg-gray-100 text-gray-600 border border-gray-200">Cifrado</span>
             </div>
           </div>
         </div>
@@ -646,13 +634,45 @@
         <p class="reveal delay-100 text-xl text-blue-50 max-w-2xl mx-auto mb-10">
           Asóciese con NeuroByte Studio para transformar su presencia digital. Construyamos algo extraordinario juntos.
         </p>
-        <div class="reveal delay-200 flex flex-col sm:flex-row justify-center gap-4">
-          <a href="https://wa.me/50558883346" class="inline-flex items-center justify-center rounded-full font-medium transition-all duration-300 h-14 px-10 text-lg bg-conversionOrange text-white hover:bg-orange-600 shadow-2xl">
-            Agendar Llamada Estratégica
-          </a>
-          <a href="mailto:hello@neurobyte.studio" class="inline-flex items-center justify-center rounded-full font-medium transition-all duration-300 h-14 px-10 text-lg border-2 border-white text-white hover:bg-white/20">
-            Contactar Soporte
-          </a>
+        <div class="reveal delay-200 max-w-4xl mx-auto mt-12 bg-white/5 backdrop-blur-lg rounded-2xl p-8 border border-white/10 shadow-2xl">
+          <form id="contact-form" class="space-y-6 text-left">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label for="nombre_completo" class="block text-sm font-medium text-gray-300 mb-2">Nombre Completo</label>
+                <input type="text" id="nombre_completo" name="nombre_completo" required class="w-full bg-deepBlue/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-electricBlue transition-colors placeholder-gray-500" placeholder="Juan Pérez">
+              </div>
+              <div>
+                <label for="email" class="block text-sm font-medium text-gray-300 mb-2">Email</label>
+                <input type="email" id="email" name="email" required class="w-full bg-deepBlue/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-electricBlue transition-colors placeholder-gray-500" placeholder="juan@empresa.com">
+              </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label for="telefono" class="block text-sm font-medium text-gray-300 mb-2">Teléfono</label>
+                <input type="tel" id="telefono" name="telefono" required class="w-full bg-deepBlue/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-electricBlue transition-colors placeholder-gray-500" placeholder="+505 8888 8888">
+              </div>
+              <div>
+                <label for="asunto" class="block text-sm font-medium text-gray-300 mb-2">Asunto</label>
+                <input type="text" id="asunto" name="asunto" value="Agendar reunion" readonly class="w-full bg-deepBlue/50 border border-white/10 rounded-lg px-4 py-3 text-gray-400 cursor-not-allowed focus:outline-none border-white/5">
+              </div>
+            </div>
+            <div>
+              <label for="contenido" class="block text-sm font-medium text-gray-300 mb-2">Mensaje</label>
+              <textarea id="contenido" name="contenido" rows="4" required class="w-full bg-deepBlue/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-electricBlue transition-colors placeholder-gray-500 resize-none" placeholder="Cuéntanos sobre tu proyecto..."></textarea>
+            </div>
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6 pt-4">
+               <a href="https://wa.me/50558883346" class="text-gray-300 hover:text-white transition-colors flex items-center gap-2 text-sm group">
+                 <div class="p-2 bg-white/10 rounded-full group-hover:bg-growthGreen transition-colors">
+                    <i data-lucide="phone" class="w-4 h-4"></i>
+                 </div>
+                 <span>¿Prefieres una llamada rápida?</span>
+               </a>
+               <button type="submit" class="w-full md:w-auto inline-flex items-center justify-center rounded-full font-medium transition-all duration-300 h-12 px-8 text-base bg-conversionOrange text-white hover:bg-orange-600 shadow-lg hover:shadow-orange-500/30 hover:scale-105">
+                 Enviar Mensaje
+                 <i data-lucide="send" class="w-4 h-4 ml-2"></i>
+               </button>
+            </div>
+          </form>
         </div>
       </div>
     </section>

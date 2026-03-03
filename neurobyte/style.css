@@ -53,7 +53,7 @@ body {
 
 /* Hero Animation */
 .hero-fade-in {
-  animation: heroFade 1.2s ease-out forwards;
+  animation: heroFade 0.8s ease-out forwards;
   opacity: 0;
 }
 @keyframes heroFade {

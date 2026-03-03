@@ -34,85 +34,13 @@ if (navbar) {
   });
 }
 
-// Particle Canvas Animation
-const canvas = document.getElementById('particle-canvas');
-if (canvas) {
-  const ctx = canvas.getContext('2d');
-  
-  let width, height;
-  let particles = [];
-  
-  function resize() {
-    width = canvas.width = window.innerWidth;
-    height = canvas.height = window.innerHeight;
-  }
-  
-  function initParticles() {
-    particles = [];
-    const particleCount = 60;
-    for (let i = 0; i < particleCount; i++) {
-      particles.push({
-        x: Math.random() * width,
-        y: Math.random() * height,
-        vx: (Math.random() - 0.5) * 0.5,
-        vy: (Math.random() - 0.5) * 0.5,
-        size: Math.random() * 2 + 1,
-        alpha: Math.random() * 0.5 + 0.1
-      });
-    }
-  }
-
-  function animateParticles() {
-    ctx.clearRect(0, 0, width, height);
-    
-    particles.forEach(p => {
-      p.x += p.vx;
-      p.y += p.vy;
-
-      if (p.x < 0 || p.x > width) p.vx *= -1;
-      if (p.y < 0 || p.y > height) p.vy *= -1;
-
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(37, 99, 235, ${p.alpha})`;
-      ctx.fill();
-    });
-
-    // Connections
-    particles.forEach((p, i) => {
-      for (let j = i + 1; j < particles.length; j++) {
-        const p2 = particles[j];
-        const dx = p.x - p2.x;
-        const dy = p.y - p2.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-
-        if (dist < 150) {
-          ctx.beginPath();
-          ctx.strokeStyle = `rgba(37, 99, 235, ${0.1 - dist / 1500})`;
-          ctx.lineWidth = 1;
-          ctx.moveTo(p.x, p.y);
-          ctx.lineTo(p2.x, p2.y);
-          ctx.stroke();
-        }
-      }
-    });
-    
-    requestAnimationFrame(animateParticles);
-  }
-
-  window.addEventListener('resize', resize);
-  resize();
-  initParticles();
-  animateParticles();
-}
-
 // Parallax Effect for Video
 window.addEventListener('scroll', () => {
   const scrollY = window.scrollY;
   const heroVideo = document.getElementById('hero-video');
   if (heroVideo && scrollY < window.innerHeight) {
-    // Subtle parallax speed
-    heroVideo.style.transform = `scale(1.05) translateY(${scrollY * 0.5}px)`;
+    // Subtle parallax speed (reduced from 0.5 to 0.2)
+    heroVideo.style.transform = `translateY(${scrollY * 0.2}px)`;
   }
 });
 
@@ -201,6 +129,75 @@ if (generateBtn) {
       generateBtn.disabled = false;
       generateBtn.classList.remove('opacity-50');
       loadingState.classList.add('hidden');
+    }
+  });
+}
+
+// Contact Form Handler
+const contactForm = document.getElementById('contact-form');
+
+if (contactForm) {
+  contactForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const submitBtn = contactForm.querySelector('button[type="submit"]');
+    const originalBtnText = submitBtn.innerHTML;
+    
+    // Disable button and show loading state
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<span>Enviando...</span><i data-lucide="loader-2" class="w-4 h-4 ml-2 animate-spin"></i>';
+    lucide.createIcons();
+
+    const formData = new FormData(contactForm);
+    const data = {
+      nombre_completo: formData.get('nombre_completo'),
+      email: formData.get('email'),
+      telefono: formData.get('telefono'),
+      asunto: formData.get('asunto'),
+      contenido: formData.get('contenido')
+    };
+
+    try {
+      const response = await fetch('https://misdemos.x10.mx/apichat/api_enviar_correo.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        // @ts-ignore
+        Swal.fire({
+          title: '¡Mensaje Enviado!',
+          text: result.message || 'Nos pondremos en contacto contigo pronto.',
+          icon: 'success',
+          confirmButtonColor: '#F97316',
+          background: '#111827',
+          color: '#ffffff'
+        });
+        contactForm.reset();
+      } else {
+        throw new Error(result.message || 'Hubo un error al enviar el correo.');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      // @ts-ignore
+      Swal.fire({
+        title: 'Error',
+        text: 'No se pudo enviar el mensaje. Por favor, intenta de nuevo más tarde.',
+        icon: 'error',
+        confirmButtonColor: '#E11D48',
+        background: '#111827',
+        color: '#ffffff'
+      });
+    } finally {
+      // Restore button state
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = originalBtnText;
+      lucide.createIcons();
     }
   });
 }
