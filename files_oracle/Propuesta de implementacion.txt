@@ -1,0 +1,7 @@
+Propuesta de implementación: control integral de requerimientos y desarrollo de TI
+Empresa financiera mediana–grande | Nicaragua | 10 programadores | Equipos internos y outsourcing
+Mi recomendación es implementar Azure DevOps como plataforma central de gestión de requerimientos, proyectos, tareas, programación, pruebas y entregas.
+No recomiendo mantener Excel como herramienta de seguimiento, ni utilizar simultáneamente Jira, Monday, ClickUp y Azure DevOps. Eso generaría información duplicada y dificultaría determinar cuál es el estado verdadero de un requerimiento.
+La solución debe permitir que el Gerente de TI pueda entrar en cualquier momento y responder:
+¿Cuántos requerimientos existen y quién los solicitó?
+¿Cuáles están pendientes de análisis o aprobación?
