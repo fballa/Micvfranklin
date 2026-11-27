@@ -1,0 +1,47 @@
+DECLARE
+    v_item_actual   VARCHAR2(100);
+    v_valor_db      VARCHAR2(4000);
+    v_valor_actual  VARCHAR2(4000);
+    v_usuario       VARCHAR2(100) := NVL(:GLOBAL.usuario_app, USER);
+    v_id_registro   NUMBER := :BLK_PUNTOS_VENTA.ID_PUNTO_VENTA; -- El ID de tu tabla
+BEGIN
+    -- 1. Obtener el primer ítem del bloque
+    v_item_actual := GET_BLOCK_PROPERTY('BLK_PUNTOS_VENTA', FIRST_ITEM);
+
+    -- 2. Recorrer todo el bloque ítem por ítem
+    WHILE v_item_actual IS NOT NULL LOOP
+        BEGIN
+            -- Obtener el valor que tiene la base de datos actualmente
+            v_valor_db := GET_ITEM_PROPERTY(v_item_actual, DATABASE_VALUE);
+
+            -- Obtener el valor que el usuario tiene en pantalla ahora
+            v_valor_actual := NAME_IN(v_item_actual);
+
+            -- 3. Comparar si son diferentes (usando NVL por si hay valores nulos)
+            IF NVL(v_valor_db, '~NULL~') != NVL(v_valor_actual, '~NULL~') THEN
+                
+                -- 4. Insertar el registro en la bitácora
+                INSERT INTO bitacora_cambios (
+                    id_registro, campo, valor_anterior, valor_actual, 
+                    operacion, usuario
+                ) VALUES (
+                    v_id_registro, 
+                    v_item_actual,     -- Nombre del campo (ej. 'NOMBRE_PV')
+                    v_valor_db,        -- Valor viejo
+                    v_valor_actual,    -- Valor nuevo
+                    'UPDATE', 
+                    v_usuario
+                );
+                
+            END IF;
+        EXCEPTION
+            WHEN OTHERS THEN
+                -- Si el ítem no es de base de datos (ej. un botón o label), 
+                -- GET_ITEM_PROPERTY fallará. Lo ignoramos y pasamos al siguiente.
+                NULL;
+        END;
+
+        -- 5. Pasar al siguiente ítem del bloque
+        v_item_actual := GET_ITEM_PROPERTY(v_item_actual, NEXT_ITEM);
+    END LOOP;
+END;

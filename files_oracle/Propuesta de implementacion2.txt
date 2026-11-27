@@ -1,0 +1,42 @@
+Propuesta de implementación: control integral de requerimientos y desarrollo de TI
+Empresa financiera mediana–grande | Nicaragua | 10 programadores | Equipos internos y outsourcing
+Mi recomendación es implementar Azure DevOps como plataforma central de gestión de requerimientos, proyectos, tareas, programación, pruebas y entregas.
+No recomiendo mantener Excel como herramienta de seguimiento, ni utilizar simultáneamente Jira, Monday, ClickUp y Azure DevOps. Eso generaría información duplicada y dificultaría determinar cuál es el estado verdadero de un requerimiento.
+La solución debe permitir que el Gerente de TI pueda entrar en cualquier momento y responder:
+¿Cuántos requerimientos existen y quién los solicitó?
+¿Cuáles están pendientes de análisis o aprobación?
+
+
+
+Kanban Soporte, errores, mantenimiento y solicitudes urgentes.
+Gestión formal de cambios Modificaciones que afecten sistemas críticos y producción.
+¿Cómo funcionaría?
+Scrum para desarrollo
+Sprints de dos semanas.
+Reunión diaria de 15 minutos.
+Planificación al inicio del sprint.
+Revisión de resultados al finalizar.
+Retrospectiva para identificar problemas.
+Requerimientos priorizados antes de iniciar el sprint.
+Kanban para operaciones
+Cada solicitud tiene responsable.
+Se establecen prioridades.
+Se limita la cantidad de tareas simultáneas.
+Los bloqueos se hacen visibles.
+Las tareas urgentes no desaparecen dentro del backlog de proyectos.
+La metodología no debe permitir que cada programador seleccione libremente qué quiere desarrollar. La prioridad debe ser definida por el responsable del producto o proceso de negocio, coordinada con la Jefatura de Desarrollo y la Gerencia de TI.
+
+
+"Explícame este requerimiento. Indícame qué debe hacer el sistema, cuáles son las reglas de negocio, qué casos excepcionales debo considerar y qué preguntas debo realizar al analista antes de comenzar."
+El asistente consulta el requerimiento y documentación autorizada, y genera una explicación estructurada.
+La respuesta debe revisarse antes de incorporarse al requerimiento oficial.
+Microsoft indica que los prompts y resultados de los modelos vendidos mediante Azure no se utilizan para entrenar modelos fundacionales sin autorización y no están disponibles para los proveedores de esos modelos. Aun así, Seguridad debe revisar ubicación de procesamiento, configuración, contratos y tratamiento de datos antes de habilitar el servicio. 
+Regla: nunca utilizar datos reales de clientes, credenciales, información bancaria o registros financieros identificables en herramientas de IA que no hayan sido expresamente autorizadas por la institución.
+
+
+Gerencia TI Todos los proyectos, requerimientos, atrasos, riesgos y entregas.
+PMO Solicitudes pendientes, aprobaciones, prioridades y antigüedad.
+Desarrollo Tareas por programador, avances, bloqueos y entregas.
+QA Pruebas pendientes, aprobadas, rechazadas y defectos abiertos.
+Infraestructura Solicitudes, incidentes y cambios tecnológicos.
+Productividad individual Tareas asignadas, completadas, vencidas y pendientes.
